@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Client Portal Login — Bali Telecommunications</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="network-bg min-h-screen flex items-center justify-center">
+<canvas id="hero-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+<div class="relative z-10 w-full max-w-md px-4">
+  <!-- Logo -->
+  <div class="text-center mb-8">
+    <a href="/pages/index.html" class="inline-flex items-center gap-3">
+      <div class="w-10 h-10 bg-gradient-to-br from-[#185FA5] to-[#2580E8] rounded-xl flex items-center justify-center">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+      </div>
+      <span class="text-xl font-bold text-white" style="font-family:'Syne',sans-serif;">Bali<span class="text-[#4DA3FF]">Telecom</span></span>
+    </a>
+    <div class="mt-4 text-[#8BA4C8] text-sm">Client Portal</div>
+  </div>
+
+  <div class="service-card p-8">
+    <!-- Tabs -->
+    <div class="flex gap-1 mb-6 bg-white/5 rounded-lg p-1">
+      <button id="tab-login" onclick="showTab('login')" class="flex-1 py-2 text-sm font-semibold rounded-md bg-[#185FA5] text-white transition-all">Sign In</button>
+      <button id="tab-register" onclick="showTab('register')" class="flex-1 py-2 text-sm font-semibold text-[#8BA4C8] rounded-md transition-all hover:text-white">Register</button>
+    </div>
+
+    <!-- Login form -->
+    <form id="login-form">
+      <div class="form-alert" style="display:none"></div>
+      <div class="mb-4">
+        <label class="form-label">Email Address</label>
+        <input name="email" type="email" class="form-input" placeholder="you@company.com" required/>
+      </div>
+      <div class="mb-6">
+        <label class="form-label">Password</label>
+        <input name="password" type="password" class="form-input" placeholder="••••••••" required/>
+      </div>
+      <button type="submit" class="btn-primary w-full justify-center">Sign In to Portal</button>
+    </form>
+
+    <!-- Register form -->
+    <form id="register-form" class="hidden">
+      <div class="form-alert" style="display:none"></div>
+      <div class="mb-4">
+        <label class="form-label">Full Name *</label>
+        <input name="name" class="form-input" placeholder="Ahmad Ridzwan" required/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Business Email *</label>
+        <input name="email" type="email" class="form-input" placeholder="you@company.com" required/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Company Name</label>
+        <input name="company" class="form-input" placeholder="ABC Sdn Bhd"/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Phone</label>
+        <input name="phone" class="form-input" placeholder="+60 12-345 6789"/>
+      </div>
+      <div class="mb-6">
+        <label class="form-label">Password * (min 8 characters)</label>
+        <input name="password" type="password" class="form-input" placeholder="••••••••" required minlength="8"/>
+      </div>
+      <button type="submit" class="btn-primary w-full justify-center">Create Account</button>
+      <p class="text-xs text-[#8BA4C8] text-center mt-3">Account activation may take 1 business day.</p>
+    </form>
+  </div>
+
+  <div class="text-center mt-6">
+    <a href="/pages/index.html" class="text-[#8BA4C8] text-sm hover:text-white transition-colors">← Back to main site</a>
+  </div>
+</div>
+
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+// Redirect if already logged in
+if (auth.isLoggedIn()) window.location.href = '/pages/portal/dashboard.html';
+
+function showTab(tab) {
+  document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
+  document.getElementById('tab-login').className = 'flex-1 py-2 text-sm font-semibold rounded-md transition-all ' + (tab==='login' ? 'bg-[#185FA5] text-white' : 'text-[#8BA4C8] hover:text-white');
+  document.getElementById('tab-register').className = 'flex-1 py-2 text-sm font-semibold rounded-md transition-all ' + (tab==='register' ? 'bg-[#185FA5] text-white' : 'text-[#8BA4C8] hover:text-white');
+}
+
+document.getElementById('login-form').addEventListener('submit', auth.handleLogin);
+
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('[type=submit]');
+  const alertEl = form.querySelector('.form-alert');
+  btn.innerHTML = '<span class="spinner"></span> Creating account...';
+  btn.disabled = true;
+  const data = Object.fromEntries(new FormData(form));
+  try {
+    const res = await api.post('/auth/register', data);
+    auth.saveAuth(res.token, res.user);
+    window.location.href = '/pages/portal/dashboard.html';
+  } catch (err) {
+    alertEl.className = 'alert alert-error';
+    alertEl.textContent = '✗ ' + err.message;
+    alertEl.style.display = 'block';
+    btn.innerHTML = 'Create Account';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

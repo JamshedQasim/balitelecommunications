@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Cloud Communications — Bali Telecommunications</title>
+  <meta name="description" content="Unified voice, video, and messaging in one cloud platform."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="network-bg">
+<div id="nav-root"></div>
+<section class="pt-28 pb-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mb-16">
+      <div class="section-tag mb-4">Service</div>
+      <div class="text-5xl mb-4">☁️</div>
+      <h1 class="text-5xl font-extrabold text-white mb-4" style="font-family:Syne,sans-serif;">Cloud Communications</h1>
+      <p class="text-xl text-[#8BA4C8] leading-relaxed mb-8">Unified voice, video, and messaging in one cloud platform.</p>
+      <div class="flex gap-4 flex-wrap">
+        <a href="/pages/contact.html?service=cloud-communications" class="btn-primary">Get a Quote</a>
+        <a href="/pages/pricing.html" class="btn-outline">View Pricing</a>
+      </div>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Overview</h2>
+        <p class="text-[#8BA4C8] leading-relaxed mb-8">Bring your entire organisation onto a single communications platform. Video conferencing, instant messaging, file sharing, screen sharing, and business phone — all in one app, accessible from any device, anywhere in Malaysia.</p>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="service-card p-4"><div class="font-semibold text-white text-sm mb-1" style="font-family:Syne,sans-serif;">Video Conferencing</div><div class="text-[#8BA4C8] text-xs">Enterprise-ready</div></div>
+          <div class="service-card p-4"><div class="font-semibold text-white text-sm mb-1" style="font-family:Syne,sans-serif;">Mobile & Desktop Apps</div><div class="text-[#8BA4C8] text-xs">SLA-backed</div></div>
+          <div class="service-card p-4"><div class="font-semibold text-white text-sm mb-1" style="font-family:Syne,sans-serif;">File Sharing</div><div class="text-[#8BA4C8] text-xs">Scalable</div></div>
+          <div class="service-card p-4"><div class="font-semibold text-white text-sm mb-1" style="font-family:Syne,sans-serif;">Microsoft 365 Integration</div><div class="text-[#8BA4C8] text-xs">24/7 support</div></div>
+        </div>
+      </div>
+      <div id="service-plans">
+        <h2 class="text-2xl font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Available Plans</h2>
+        <div class="text-[#8BA4C8] text-sm">Loading plans...</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Lead form -->
+<section class="pb-20">
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="service-card p-8">
+      <h2 class="text-xl font-bold text-white mb-2" style="font-family:Syne,sans-serif;">Request a Quote for Cloud Communications</h2>
+      <p class="text-[#8BA4C8] text-sm mb-6">Our team will prepare a custom proposal within 24 hours.</p>
+      <form class="lead-form">
+        <input type="hidden" name="service_interest" value="Cloud Communications"/>
+        <div class="form-alert" style="display:none"></div>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><label class="form-label">Name *</label><input name="name" class="form-input" placeholder="Your name" required/></div>
+          <div><label class="form-label">Company</label><input name="company" class="form-input" placeholder="Your company"/></div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><label class="form-label">Email *</label><input name="email" type="email" class="form-input" required/></div>
+          <div><label class="form-label">Phone</label><input name="phone" class="form-input"/></div>
+        </div>
+        <div class="mb-6"><label class="form-label">Message</label><textarea name="message" class="form-input" rows="3" placeholder="Tell us about your requirements"></textarea></div>
+        <button type="submit" class="btn-primary w-full justify-center">Send Enquiry</button>
+      </form>
+    </div>
+  </div>
+</section>
+<div id="footer-root"></div>
+<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+document.getElementById('nav-root').innerHTML = components.getNavHTML('services');
+document.getElementById('footer-root').innerHTML = components.getFooterHTML();
+api.get('/services/cloud-communications').then(function(d) {
+  var s = d.service;
+  var plans = s.plans || [];
+  if (!plans.length) { document.getElementById('service-plans').innerHTML = '<h2 class="text-2xl font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Available Plans</h2><p class="text-[#8BA4C8] text-sm">Contact us for custom pricing on this service.</p>'; return; }
+  document.getElementById('service-plans').innerHTML = '<h2 class="text-2xl font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Available Plans</h2>' +
+    plans.map(function(p) {
+      return '<div class="plan-card mb-4 '+(p.is_popular?'popular':'')+'">' +
+        (p.is_popular?'<div class="text-xs text-[#4DA3FF] font-bold mb-2">MOST POPULAR</div>':'')+
+        '<div class="flex items-center justify-between"><h3 class="font-bold text-white" style="font-family:Syne,sans-serif;">'+p.name+'</h3><span class="text-lg font-bold text-[#4DA3FF]">RM'+parseFloat(p.price_myr).toFixed(0)+'<span class="text-xs text-[#8BA4C8] font-normal">/mo</span></span></div>' +
+        '<div class="text-xs text-[#8BA4C8] mt-1">'+p.sla_uptime+'% SLA · '+(p.speed_mbps>=1000?p.speed_mbps/1000+'G':p.speed_mbps+'M')+'bps</div>' +
+        '</div>';
+    }).join('');
+}).catch(function() {});
+</script>
+</body>
+</html>

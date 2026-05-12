@@ -1,0 +1,337 @@
+/* Bali Telecommunications — Custom CSS */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --brand-navy: #060E1E;
+  --brand-dark: #0A1628;
+  --brand-mid: #0D1F3C;
+  --brand-blue: #185FA5;
+  --brand-electric: #2580E8;
+  --brand-glow: #4DA3FF;
+  --brand-cyan: #00D4FF;
+  --brand-text: #E8F0FC;
+  --brand-muted: #8BA4C8;
+  --brand-border: rgba(255,255,255,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--brand-navy);
+  color: var(--brand-text);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Syne', sans-serif; }
+
+/* Network grid background */
+.network-bg {
+  background-image: 
+    linear-gradient(rgba(37,128,232,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,128,232,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Glow effects */
+.glow-blue { box-shadow: 0 0 30px rgba(37,128,232,0.3); }
+.text-glow { text-shadow: 0 0 20px rgba(77,163,255,0.5); }
+
+/* Animated underline */
+.nav-link {
+  position: relative;
+  transition: color 0.2s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--brand-electric);
+  transition: width 0.3s;
+}
+.nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #fff 0%, var(--brand-glow) 50%, var(--brand-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Cards */
+.service-card {
+  background: linear-gradient(135deg, rgba(24,95,165,0.12), rgba(13,31,60,0.8));
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(10px);
+}
+.service-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(37,128,232,0.4);
+  box-shadow: 0 20px 60px rgba(37,128,232,0.15);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-electric));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37,128,232,0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--brand-glow);
+  border: 1px solid rgba(77,163,255,0.4);
+  border-radius: 8px;
+  padding: 11px 28px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline:hover {
+  background: rgba(37,128,232,0.1);
+  border-color: var(--brand-glow);
+  transform: translateY(-2px);
+}
+
+/* Section headers */
+.section-tag {
+  display: inline-block;
+  padding: 4px 14px;
+  border: 1px solid rgba(37,128,232,0.4);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-glow);
+  margin-bottom: 16px;
+}
+
+/* Stats */
+.stat-card {
+  text-align: center;
+  padding: 24px;
+  border: 1px solid var(--brand-border);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+}
+
+/* Forms */
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--brand-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--brand-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.form-input:focus { border-color: var(--brand-electric); }
+.form-input::placeholder { color: var(--brand-muted); }
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--brand-muted);
+  margin-bottom: 6px;
+}
+
+select.form-input option { background: var(--brand-dark); }
+
+/* Sticky CTA */
+#sticky-cta {
+  position: fixed;
+  bottom: 24px;
+  right: 90px;
+  z-index: 1000;
+  animation: slideUp 0.5s ease;
+}
+
+/* WhatsApp button */
+#whatsapp-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: 52px;
+  height: 52px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+  transition: transform 0.2s;
+  text-decoration: none;
+}
+#whatsapp-btn:hover { transform: scale(1.1); }
+
+/* Animations */
+@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes networkPulse { 0%{stroke-opacity:0.1} 50%{stroke-opacity:0.4} 100%{stroke-opacity:0.1} }
+
+.float { animation: float 4s ease-in-out infinite; }
+.pulse { animation: pulse 2s ease-in-out infinite; }
+
+/* Navbar */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 900;
+  background: rgba(6,14,30,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--brand-border);
+  transition: background 0.3s;
+}
+
+/* Hero canvas */
+#hero-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* Status badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.status-up { background: rgba(34,197,94,0.15); color: #4ADE80; border: 1px solid rgba(34,197,94,0.3); }
+.status-down { background: rgba(239,68,68,0.15); color: #F87171; border: 1px solid rgba(239,68,68,0.3); }
+.status-warning { background: rgba(234,179,8,0.15); color: #FDE047; border: 1px solid rgba(234,179,8,0.3); }
+
+.dot-pulse::before { content:''; display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor; animation:pulse 1.5s infinite; }
+
+/* Plan cards */
+.plan-card {
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s;
+  position: relative;
+}
+.plan-card.popular {
+  border-color: var(--brand-electric);
+  background: linear-gradient(135deg, rgba(37,128,232,0.12), rgba(6,14,30,0.9));
+}
+.plan-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(37,128,232,0.15); }
+
+/* Industry tags */
+.industry-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid var(--brand-border);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.industry-chip:hover { border-color: rgba(37,128,232,0.5); background: rgba(37,128,232,0.08); }
+
+/* Alert */
+.alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; }
+.alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #4ADE80; }
+.alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #F87171; }
+
+/* Spinner */
+.spinner { width:20px; height:20px; border:2px solid rgba(255,255,255,0.2); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; display:inline-block; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Coverage map */
+#coverage-map { height: 480px; border-radius: 16px; overflow: hidden; border: 1px solid var(--brand-border); }
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2rem !important; }
+  #sticky-cta { display: none; }
+
+  /* Reduce section vertical padding */
+  section.py-20 { padding-top: 3rem; padding-bottom: 3rem; }
+
+  /* Stat cards smaller padding on mobile */
+  .stat-card { padding: 16px 12px; }
+  .stat-card .text-3xl { font-size: 1.5rem; }
+
+  /* Plan cards */
+  .plan-card { padding: 24px 18px; }
+
+  /* Coverage map shorter on mobile */
+  #coverage-map { height: 300px; }
+
+  /* Service cards */
+  .service-card.p-8 { padding: 1.25rem; }
+
+  /* Buttons full-width on mobile inside CTA */
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+
+  /* Nav mobile menu spacing */
+  #mobile-menu a { padding: 10px 12px; }
+
+  /* Footer columns stack nicely */
+  footer .grid { gap: 1.5rem; }
+
+  /* WhatsApp button position */
+  #whatsapp-btn { bottom: 16px; right: 16px; width: 46px; height: 46px; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 1.75rem !important; }
+  .section-tag { font-size: 10px; }
+
+  /* Trust badges wrap to single column */
+  .flex.flex-wrap.gap-6 { gap: 0.75rem; }
+
+  /* Reduce hero button sizes */
+  .btn-primary, .btn-outline { font-size: 14px; padding: 10px 20px; }
+}
+
+@media (min-width: 769px) {
+  /* Restore button widths on desktop */
+  .btn-primary, .btn-outline { width: auto; }
+}

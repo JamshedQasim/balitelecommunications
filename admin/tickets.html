@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Tickets — Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="network-bg min-h-screen">
+<div class="flex min-h-screen">
+  <aside class="w-64 bg-[#05090F] border-r border-white/10 flex flex-col fixed h-full z-50">
+    <div class="p-6 border-b border-white/10"><div class="text-white font-bold text-sm" style="font-family:Syne,sans-serif;">BaliTelecom <span class="text-red-400 text-xs">ADMIN</span></div></div>
+    <nav class="flex-1 p-4 space-y-1 text-sm">
+      <a href="/admin/index.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Dashboard</a>
+      <a href="/admin/leads.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Leads</a>
+      <a href="/admin/tickets.html" class="block px-4 py-2.5 rounded-lg bg-white/10 text-white">Tickets</a>
+      <a href="/admin/users.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Users</a>
+      <a href="/admin/invoices.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Invoices</a>
+      <a href="/admin/blog.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Blog Posts</a>
+    </nav>
+    <div class="p-4 border-t border-white/10"><button id="logout-btn" class="w-full px-4 py-2.5 text-[#8BA4C8] hover:text-red-400 text-sm text-left">Sign Out</button></div>
+  </aside>
+  <main class="ml-64 flex-1 p-8">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-2xl font-bold text-white mb-6" style="font-family:Syne,sans-serif;">Support Tickets</h1>
+      <div class="service-card overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead><tr class="border-b border-white/10 text-left">
+            <th class="px-5 py-4 text-[#8BA4C8] font-medium">Subject / Client</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Category</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Priority</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Status</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Date</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Action</th>
+          </tr></thead>
+          <tbody id="tickets-table"><tr><td colspan="6" class="text-center py-8 text-[#8BA4C8]">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+if (!auth.isAdmin()) { window.location.href = '/pages/portal/login.html'; }
+document.getElementById('logout-btn').addEventListener('click', auth.logout);
+var pc = {low:'text-green-400',medium:'text-yellow-400',high:'text-orange-400',critical:'text-red-400'};
+var sc = {open:'status-warning',in_progress:'status-warning',resolved:'status-up',closed:'status-up'};
+
+async function load() {
+  try {
+    var d = await api.get('/tickets/all?limit=50');
+    document.getElementById('tickets-table').innerHTML = d.tickets.length ? d.tickets.map(function(t) {
+      var dt = new Date(t.created_at).toLocaleDateString('en-MY');
+      return '<tr class="border-b border-white/5 hover:bg-white/2">' +
+        '<td class="px-5 py-3"><div class="text-white font-medium text-xs max-w-xs truncate">'+t.subject+'</div><div class="text-[#8BA4C8] text-xs">'+(t.user?t.user.name+' · '+t.user.email:'')+'</div></td>' +
+        '<td class="px-4 py-3 text-[#8BA4C8] text-xs capitalize">'+t.category+'</td>' +
+        '<td class="px-4 py-3 text-xs '+(pc[t.priority]||'text-gray-400')+' font-semibold capitalize">'+t.priority+'</td>' +
+        '<td class="px-4 py-3"><span class="status-badge '+(sc[t.status]||'status-warning')+' text-xs capitalize">'+t.status.replace('_',' ')+'</span></td>' +
+        '<td class="px-4 py-3 text-[#8BA4C8] text-xs">'+dt+'</td>' +
+        '<td class="px-4 py-3"><select onchange="updateStatus('+t.id+', this.value)" class="text-xs bg-[#0D1F3C] border border-white/10 text-[#8BA4C8] rounded px-2 py-1"><option value="open">open</option><option value="in_progress">in progress</option><option value="resolved">resolved</option><option value="closed">closed</option></select></td>' +
+        '</tr>';
+    }).join('') : '<tr><td colspan="6" class="text-center py-8 text-[#8BA4C8]">No tickets found.</td></tr>';
+  } catch(e) { document.getElementById('tickets-table').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-red-400">Failed to load.</td></tr>'; }
+}
+
+async function updateStatus(id, status) {
+  try { await api.patch('/tickets/'+id+'/status', {status}); load(); } catch(e) { alert('Failed: ' + e.message); }
+}
+load();
+</script>
+</body>
+</html>

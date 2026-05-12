@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const { getBlogPosts, getBlogPost, createBlogPost, updateBlogPost, deleteBlogPost } = require('../controllers/main.controller');
+const { verifyJWT, requireRole } = require('../middleware/auth.middleware');
+router.get('/', getBlogPosts);
+router.get('/:slug', getBlogPost);
+router.post('/', verifyJWT, requireRole('admin'), createBlogPost);
+router.put('/:id', verifyJWT, requireRole('admin'), updateBlogPost);
+router.delete('/:id', verifyJWT, requireRole('admin'), deleteBlogPost);
+module.exports = router;

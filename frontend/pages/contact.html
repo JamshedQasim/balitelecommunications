@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contact Us — Bali Telecommunications</title>
+  <meta name="description" content="Contact Bali Telecommunications for enterprise telecom solutions, quotes, and support."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="network-bg">
+<div id="nav-root"></div>
+
+<section class="pt-28 pb-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <div class="section-tag">Get In Touch</div>
+      <h1 class="text-5xl font-extrabold text-white mt-3" style="font-family:'Syne',sans-serif;">Talk to Our <span class="gradient-text">Sales Team</span></h1>
+      <p class="text-[#8BA4C8] mt-4 max-w-xl mx-auto">We respond within 2 business hours. Our team is ready to design the right solution for your business.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Contact form -->
+      <div class="service-card p-8">
+        <h2 class="text-xl font-bold text-white mb-6" style="font-family:'Syne',sans-serif;">Send Us a Message</h2>
+        <form class="lead-form" id="contact-form">
+          <div class="form-alert" style="display:none"></div>
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="form-label">Full Name *</label>
+              <input name="name" class="form-input" placeholder="Ahmad Ridzwan" required/>
+            </div>
+            <div>
+              <label class="form-label">Company</label>
+              <input name="company" class="form-input" placeholder="ABC Sdn Bhd"/>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="form-label">Business Email *</label>
+              <input name="email" type="email" class="form-input" placeholder="you@company.com" required/>
+            </div>
+            <div>
+              <label class="form-label">Phone Number</label>
+              <input name="phone" class="form-input" placeholder="+60 12-345 6789"/>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Service Interest</label>
+            <select name="service_interest" class="form-input">
+              <option value="">Select a service...</option>
+              <option>Fiber Internet</option>
+              <option>VoIP Solutions</option>
+              <option>Cloud Communications</option>
+              <option>Managed IT Services</option>
+              <option>Security Systems</option>
+              <option>Network Infrastructure</option>
+              <option>Enterprise Package</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="mb-6">
+            <label class="form-label">Message</label>
+            <textarea name="message" class="form-input" rows="5" placeholder="Tell us about your requirements, current setup, number of users, etc."></textarea>
+          </div>
+          <button type="submit" class="btn-primary w-full justify-center">Send Message →</button>
+          <p class="text-xs text-[#8BA4C8] mt-3 text-center">We'll respond within 2 business hours.</p>
+        </form>
+      </div>
+
+      <!-- Contact info -->
+      <div class="space-y-6">
+        <div class="service-card p-6">
+          <h3 class="font-bold text-white mb-4" style="font-family:'Syne',sans-serif;">Contact Information</h3>
+          <div class="space-y-4">
+            ${[
+              ['📞','Phone','+603-1234-5678','tel:+60312345678'],
+              ['📧','Email','info@balitelecommunications.com','mailto:info@balitelecommunications.com'],
+              ['💬','WhatsApp','+60 12-345 6789','https://wa.me/60123456789'],
+              ['📍','Office','Level 12, Menara Telecom, Jalan Semarak, 50400 Kuala Lumpur','#'],
+            ].map(([icon,label,val,href]) => `
+            <a href="${href}" class="flex items-start gap-4 group">
+              <span class="text-xl">${icon}</span>
+              <div>
+                <div class="text-xs text-[#8BA4C8] font-medium uppercase tracking-wider">${label}</div>
+                <div class="text-white text-sm group-hover:text-[#4DA3FF] transition-colors">${val}</div>
+              </div>
+            </a>`).join('')}
+          </div>
+        </div>
+
+        <div class="service-card p-6">
+          <h3 class="font-bold text-white mb-4" style="font-family:'Syne',sans-serif;">Business Hours</h3>
+          <div class="space-y-2 text-sm">
+            ${[['Monday – Friday','8:00 AM – 6:00 PM'],['Saturday','9:00 AM – 1:00 PM'],['Sunday & Public Holidays','Closed'],['Emergency Support','24/7 via hotline']].map(([d,t]) => `
+            <div class="flex justify-between"><span class="text-[#8BA4C8]">${d}</span><span class="text-white font-medium">${t}</span></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="service-card p-6">
+          <h3 class="font-bold text-white mb-4" style="font-family:'Syne',sans-serif;">Google Maps</h3>
+          <div class="rounded-xl overflow-hidden h-48 bg-[#0D1F3C] flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-4xl mb-2">📍</div>
+              <p class="text-[#8BA4C8] text-sm">Menara Telecom, KL</p>
+              <a href="https://maps.google.com" target="_blank" class="text-[#4DA3FF] text-xs mt-1 block hover:underline">Open in Google Maps →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+document.getElementById('nav-root').innerHTML = components.getNavHTML('contact');
+document.getElementById('footer-root').innerHTML = components.getFooterHTML();
+
+// Pre-fill plan from URL
+const params = new URLSearchParams(window.location.search);
+if (params.get('plan')) {
+  const sel = document.querySelector('[name=service_interest]');
+  if (sel) sel.value = params.get('plan') || '';
+}
+</script>
+</body>
+</html>

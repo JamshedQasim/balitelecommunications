@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Pricing Plans — Bali Telecommunications</title>
+  <meta name="description" content="Transparent pricing for SME and enterprise telecom plans. Fiber internet, VoIP and managed IT with clear SLAs."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="network-bg">
+<div id="nav-root"></div>
+
+<section class="pt-28 pb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="section-tag">Pricing</div>
+    <h1 class="text-5xl font-extrabold text-white mt-3 mb-4" style="font-family:'Syne',sans-serif;">Simple, Transparent <span class="gradient-text">Pricing</span></h1>
+    <p class="text-[#8BA4C8] max-w-xl mx-auto">No hidden fees. No surprises. Enterprise SLAs for every budget.</p>
+    <!-- Toggle -->
+    <div class="flex items-center justify-center gap-4 mt-8">
+      <span class="text-sm text-[#8BA4C8]">SME</span>
+      <button id="toggle-btn" onclick="toggleTarget()" class="relative w-14 h-7 rounded-full bg-[#185FA5]/40 border border-[#185FA5]/50 transition-colors focus:outline-none">
+        <span id="toggle-dot" class="absolute left-1 top-1 w-5 h-5 rounded-full bg-white transition-transform duration-200"></span>
+      </button>
+      <span class="text-sm text-[#8BA4C8]">Enterprise</span>
+    </div>
+  </div>
+</section>
+
+<section class="pb-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div id="plans-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Populated by JS -->
+      <div class="plan-card animate-pulse h-64"></div>
+      <div class="plan-card animate-pulse h-64"></div>
+      <div class="plan-card animate-pulse h-64 popular"></div>
+      <div class="plan-card animate-pulse h-64"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Compare table -->
+<section class="pb-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="section-tag">Plan Comparison</div>
+      <h2 class="text-2xl sm:text-3xl font-bold text-white mt-3" style="font-family:'Syne',sans-serif;">What's Included in Every Plan</h2>
+    </div>
+    <div class="service-card overflow-hidden overflow-x-auto">
+      <table class="w-full text-sm min-w-[520px]">
+        <thead>
+          <tr class="border-b border-white/10">
+            <th class="text-left px-6 py-4 text-[#8BA4C8] font-medium w-1/2">Feature</th>
+            <th class="text-center px-4 py-4 w-1/4">
+              <div class="inline-flex flex-col items-center gap-1">
+                <span class="text-xs text-[#8BA4C8] uppercase tracking-widest font-semibold">SME</span>
+                <span class="text-white font-bold">Business</span>
+              </div>
+            </th>
+            <th class="text-center px-4 py-4 w-1/4">
+              <div class="inline-flex flex-col items-center gap-1">
+                <span class="text-xs text-[#4DA3FF] uppercase tracking-widest font-semibold">Enterprise</span>
+                <span class="text-[#4DA3FF] font-bold">Premium</span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">Dedicated fiber line</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+          </tr>
+          <tr class="bg-white/[0.02] border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">Symmetrical upload/download</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">Static IP address</td>
+            <td class="text-center px-4 py-3 text-[#8BA4C8]">1 IP</td>
+            <td class="text-center px-4 py-3 text-[#4DA3FF] font-medium">Block /29+</td>
+          </tr>
+          <tr class="bg-white/[0.02] border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">24/7 NOC monitoring</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">SLA uptime guarantee</td>
+            <td class="text-center px-4 py-3 text-[#8BA4C8]">99.5%</td>
+            <td class="text-center px-4 py-3 text-[#4DA3FF] font-medium">99.99%</td>
+          </tr>
+          <tr class="bg-white/[0.02] border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">Technical support</td>
+            <td class="text-center px-4 py-3 text-[#8BA4C8]">Email &amp; chat</td>
+            <td class="text-center px-4 py-3 text-[#4DA3FF] font-medium">Dedicated account manager</td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">Response time</td>
+            <td class="text-center px-4 py-3 text-[#8BA4C8]">Next business day</td>
+            <td class="text-center px-4 py-3 text-[#4DA3FF] font-medium">4-hour SLA</td>
+          </tr>
+          <tr class="bg-white/[0.02] border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">Hardware included</td>
+            <td class="text-center px-4 py-3 text-[#8BA4C8]">Basic router</td>
+            <td class="text-center px-4 py-3 text-[#4DA3FF] font-medium">Premium CPE</td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">IP management portal</td>
+            <td class="text-center px-4 py-3 text-red-400/70 font-bold text-base">✗</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+          </tr>
+          <tr class="bg-white/[0.02] border-b border-white/5">
+            <td class="px-6 py-3 text-[#E8F0FC]">BGP routing</td>
+            <td class="text-center px-4 py-3 text-red-400/70 font-bold text-base">✗</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+          </tr>
+          <tr>
+            <td class="px-6 py-3 text-[#E8F0FC]">SD-WAN support</td>
+            <td class="text-center px-4 py-3 text-red-400/70 font-bold text-base">✗</td>
+            <td class="text-center px-4 py-3 text-green-400 font-bold text-base">✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="pb-20">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <div class="service-card p-10" style="background:linear-gradient(135deg,rgba(24,95,165,0.2),rgba(37,128,232,0.1))">
+      <h2 class="text-3xl font-bold text-white mb-3" style="font-family:'Syne',sans-serif;">Need a Custom Plan?</h2>
+      <p class="text-[#8BA4C8] mb-6">Multi-site deployments, government contracts, and special requirements handled by our enterprise team.</p>
+      <a href="/pages/contact.html" class="btn-primary">Contact Enterprise Sales</a>
+    </div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+document.getElementById('nav-root').innerHTML = components.getNavHTML('pricing');
+document.getElementById('footer-root').innerHTML = components.getFooterHTML();
+
+let currentTarget = 'sme';
+let allPlans = [];
+
+function toggleTarget() {
+  currentTarget = currentTarget === 'sme' ? 'enterprise' : 'sme';
+  document.getElementById('toggle-dot').style.transform = currentTarget === 'enterprise' ? 'translateX(28px)' : 'translateX(0)';
+  renderPlans(allPlans.filter(p => p.target === currentTarget));
+}
+
+function renderPlans(plans) {
+  document.getElementById('plans-grid').innerHTML = plans.length ? plans.map(p => `
+    <div class="plan-card ${p.is_popular ? 'popular' : ''}" data-reveal>
+      ${p.is_popular ? '<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2580E8] text-white text-xs font-bold px-4 py-1 rounded-full">Most Popular</div>' : ''}
+      <div class="text-[#8BA4C8] text-xs font-semibold uppercase tracking-wider mb-2">${p.service?.name || 'Fiber Internet'}</div>
+      <h3 class="text-xl font-bold text-white mb-1" style="font-family:'Syne',sans-serif;">${p.name}</h3>
+      <div class="flex items-end gap-1 mb-1">
+        <span class="text-3xl font-extrabold text-white" style="font-family:'Syne',sans-serif;">RM${parseFloat(p.price_myr).toLocaleString()}</span>
+        <span class="text-[#8BA4C8] text-sm mb-1">/mo</span>
+      </div>
+      <div class="text-[#4DA3FF] text-sm font-semibold mb-4">${p.speed_mbps >= 1000 ? (p.speed_mbps/1000)+'G' : p.speed_mbps+'M'} bps · ${p.sla_uptime}% SLA</div>
+      <ul class="space-y-2 mb-6">
+        ${(p.features || []).map(f => `<li class="flex items-center gap-2 text-sm text-[#8BA4C8]"><svg class="w-4 h-4 text-[#4DA3FF] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>${f}</li>`).join('')}
+      </ul>
+      <a href="/pages/contact.html?plan=${p.name}" class="btn-${p.is_popular?'primary':'outline'} w-full justify-center text-sm">Get This Plan</a>
+    </div>`).join('') : '<div class="col-span-4 text-center text-[#8BA4C8] py-12">No plans available for this tier.</div>';
+}
+
+api.get('/plans').then(data => {
+  allPlans = data.plans;
+  renderPlans(allPlans.filter(p => p.target === 'sme'));
+}).catch(() => {
+  document.getElementById('plans-grid').innerHTML = '<div class="col-span-4 text-center text-[#8BA4C8] py-12">Unable to load plans. Please contact us directly.</div>';
+});
+</script>
+</body>
+</html>

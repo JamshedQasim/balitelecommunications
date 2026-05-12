@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Blog Posts — Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="network-bg min-h-screen">
+<div class="flex min-h-screen">
+  <aside class="w-64 bg-[#05090F] border-r border-white/10 flex flex-col fixed h-full z-50">
+    <div class="p-6 border-b border-white/10"><div class="text-white font-bold text-sm" style="font-family:Syne,sans-serif;">BaliTelecom <span class="text-red-400 text-xs">ADMIN</span></div></div>
+    <nav class="flex-1 p-4 space-y-1 text-sm">
+      <a href="/admin/index.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Dashboard</a>
+      <a href="/admin/leads.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Leads</a>
+      <a href="/admin/tickets.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Tickets</a>
+      <a href="/admin/users.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Users</a>
+      <a href="/admin/invoices.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Invoices</a>
+      <a href="/admin/blog.html" class="block px-4 py-2.5 rounded-lg bg-white/10 text-white">Blog Posts</a>
+    </nav>
+    <div class="p-4 border-t border-white/10"><button id="logout-btn" class="w-full px-4 py-2.5 text-[#8BA4C8] hover:text-red-400 text-sm text-left">Sign Out</button></div>
+  </aside>
+  <main class="ml-64 flex-1 p-8">
+    <div class="max-w-5xl mx-auto">
+      <h1 class="text-2xl font-bold text-white mb-6" style="font-family:Syne,sans-serif;">Blog Posts</h1>
+      <!-- New Post Form -->
+      <div class="service-card p-6 mb-6">
+        <h2 class="font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Create New Post</h2>
+        <div id="blog-alert" class="form-alert" style="display:none"></div>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><label class="form-label">Title *</label><input id="b-title" class="form-input" placeholder="Post title" required/></div>
+          <div><label class="form-label">Category</label><input id="b-cat" class="form-input" placeholder="e.g. Enterprise"/></div>
+        </div>
+        <div class="mb-4"><label class="form-label">Slug (auto-generated if empty)</label><input id="b-slug" class="form-input" placeholder="my-post-slug"/></div>
+        <div class="mb-4"><label class="form-label">Excerpt</label><textarea id="b-excerpt" class="form-input" rows="2" placeholder="Short description..."></textarea></div>
+        <div class="mb-4"><label class="form-label">Content (HTML)</label><textarea id="b-content" class="form-input" rows="6" placeholder="<p>Your content here...</p>"></textarea></div>
+        <div class="flex gap-3">
+          <button onclick="createPost(false)" class="btn-outline text-sm py-2">Save Draft</button>
+          <button onclick="createPost(true)" class="btn-primary text-sm py-2">Publish</button>
+        </div>
+      </div>
+      <!-- Post list -->
+      <div class="service-card overflow-hidden">
+        <table class="w-full text-sm">
+          <thead><tr class="border-b border-white/10 text-left">
+            <th class="px-5 py-4 text-[#8BA4C8] font-medium">Title</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Category</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Views</th>
+            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Status</th>
+          </tr></thead>
+          <tbody id="blog-table"><tr><td colspan="4" class="text-center py-8 text-[#8BA4C8]">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+if (!auth.isAdmin()) { window.location.href = '/pages/portal/login.html'; }
+document.getElementById('logout-btn').addEventListener('click', auth.logout);
+
+function slugify(t) { return t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+
+async function createPost(publish) {
+  var title = document.getElementById('b-title').value.trim();
+  var alertEl = document.getElementById('blog-alert');
+  if (!title) { alertEl.className='alert alert-error'; alertEl.textContent='Title is required.'; alertEl.style.display='block'; return; }
+  var slug = document.getElementById('b-slug').value.trim() || slugify(title)+'-'+Date.now();
+  var body = { title, slug, category: document.getElementById('b-cat').value, excerpt: document.getElementById('b-excerpt').value, content: document.getElementById('b-content').value, is_published: publish };
+  try {
+    await api.post('/blog', body);
+    alertEl.className='alert alert-success'; alertEl.textContent='✓ Post '+(publish?'published':'saved as draft')+'.'; alertEl.style.display='block';
+    loadPosts();
+  } catch(e) { alertEl.className='alert alert-error'; alertEl.textContent='✗ '+e.message; alertEl.style.display='block'; }
+}
+
+async function loadPosts() {
+  try {
+    var d = await api.get('/blog?limit=50');
+    document.getElementById('blog-table').innerHTML = d.posts.length ? d.posts.map(function(p) {
+      return '<tr class="border-b border-white/5"><td class="px-5 py-3"><div class="text-white font-medium text-xs">'+p.title+'</div><div class="text-[#8BA4C8] text-xs">'+p.slug+'</div></td><td class="px-4 py-3 text-[#8BA4C8] text-xs">'+(p.category||'-')+'</td><td class="px-4 py-3 text-[#8BA4C8] text-xs">'+p.views+'</td><td class="px-4 py-3"><span class="status-badge '+(p.is_published?'status-up':'status-warning')+' text-xs">'+(p.is_published?'Published':'Draft')+'</span></td></tr>';
+    }).join('') : '<tr><td colspan="4" class="text-center py-8 text-[#8BA4C8]">No posts.</td></tr>';
+  } catch(e) {}
+}
+loadPosts();
+</script>
+</body>
+</html>

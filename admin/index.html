@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Dashboard — Bali Telecom</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="network-bg min-h-screen">
+<div class="flex min-h-screen">
+  <!-- Admin Sidebar -->
+  <aside class="w-64 bg-[#05090F] border-r border-white/10 flex flex-col fixed h-full z-50">
+    <div class="p-6 border-b border-white/10">
+      <div class="text-white font-bold text-sm" style="font-family:Syne,sans-serif;">BaliTelecom <span class="text-red-400 text-xs">ADMIN</span></div>
+      <div class="text-[#8BA4C8] text-xs mt-1" id="admin-name">Loading...</div>
+    </div>
+    <nav class="flex-1 p-4 space-y-1 text-sm">
+      <a href="/admin/index.html" class="block px-4 py-2.5 rounded-lg bg-white/10 text-white">Dashboard</a>
+      <a href="/admin/leads.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Leads</a>
+      <a href="/admin/tickets.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Tickets</a>
+      <a href="/admin/users.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Users</a>
+      <a href="/admin/invoices.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Invoices</a>
+      <a href="/admin/blog.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Blog Posts</a>
+      <hr class="border-white/10 my-3"/>
+      <a href="/pages/index.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">← View Site</a>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <button id="logout-btn" class="w-full px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-red-400 text-sm text-left">Sign Out</button>
+    </div>
+  </aside>
+  <!-- Main -->
+  <main class="ml-64 flex-1 p-8">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-2xl font-bold text-white mb-8" style="font-family:Syne,sans-serif;">Admin Dashboard</h1>
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-[#4DA3FF]" id="s-leads">—</div><div class="text-xs text-[#8BA4C8] mt-1">Total Leads</div></div>
+        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-yellow-400" id="s-new-leads">—</div><div class="text-xs text-[#8BA4C8] mt-1">New Leads</div></div>
+        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-red-400" id="s-tickets">—</div><div class="text-xs text-[#8BA4C8] mt-1">Open Tickets</div></div>
+        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-orange-400" id="s-unpaid">—</div><div class="text-xs text-[#8BA4C8] mt-1">Unpaid Invoices</div></div>
+        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-green-400" id="s-users">—</div><div class="text-xs text-[#8BA4C8] mt-1">Clients</div></div>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="service-card p-6">
+          <h2 class="font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Recent Leads <a href="/admin/leads.html" class="text-[#4DA3FF] text-xs ml-2">View all</a></h2>
+          <div id="recent-leads" class="text-[#8BA4C8] text-sm text-center py-6">Loading...</div>
+        </div>
+        <div class="service-card p-6">
+          <h2 class="font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Recent Tickets <a href="/admin/tickets.html" class="text-[#4DA3FF] text-xs ml-2">View all</a></h2>
+          <div id="recent-tickets-admin" class="text-[#8BA4C8] text-sm text-center py-6">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+if (!auth.isAdmin()) { window.location.href = '/pages/portal/login.html'; }
+var user = auth.getUser();
+document.getElementById('admin-name').textContent = user ? user.name : '';
+document.getElementById('logout-btn').addEventListener('click', auth.logout);
+async function load() {
+  try {
+    var s = await api.get('/admin/stats');
+    document.getElementById('s-leads').textContent = s.stats.totalLeads;
+    document.getElementById('s-new-leads').textContent = s.stats.newLeads;
+    document.getElementById('s-tickets').textContent = s.stats.openTickets;
+    document.getElementById('s-unpaid').textContent = s.stats.unpaidInvoices;
+    document.getElementById('s-users').textContent = s.stats.totalUsers;
+    var lr = await api.get('/leads?limit=5');
+    var sc = {new:'text-yellow-400',contacted:'text-blue-400',converted:'text-green-400',lost:'text-red-400'};
+    document.getElementById('recent-leads').innerHTML = lr.leads.length ? '<div class="space-y-2">'+lr.leads.map(function(l){
+      return '<div class="flex justify-between items-center py-2 border-b border-white/5 text-xs"><div><div class="text-white font-medium">'+l.name+'</div><div class="text-[#8BA4C8]">'+l.email+' · '+(l.company||'-')+'</div></div><span class="capitalize '+(sc[l.status]||'text-gray-400')+'">'+l.status+'</span></div>';
+    }).join('')+'</div>' : 'No leads yet.';
+    var tr = await api.get('/tickets/all?limit=5');
+    var pc = {low:'text-green-400',medium:'text-yellow-400',high:'text-orange-400',critical:'text-red-400'};
+    document.getElementById('recent-tickets-admin').innerHTML = tr.tickets.length ? '<div class="space-y-2">'+tr.tickets.map(function(t){
+      return '<div class="flex justify-between items-center py-2 border-b border-white/5 text-xs"><div><div class="text-white font-medium truncate max-w-xs">'+t.subject+'</div><div class="text-[#8BA4C8]">'+(t.user?t.user.name:'')+'</div></div><span class="capitalize '+(pc[t.priority]||'text-gray-400')+'">'+t.priority+'</span></div>';
+    }).join('')+'</div>' : 'No tickets yet.';
+  } catch(e) { console.error(e); }
+}
+load();
+</script>
+</body>
+</html>

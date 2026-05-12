@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Coverage Map — Bali Telecommunications</title>
+  <meta name="description" content="Check if Bali Telecom fiber internet and business broadband is available in your area."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>#coverage-map{height:500px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}.leaflet-container{background:#0A1628;}</style>
+</head>
+<body class="network-bg">
+<div id="nav-root"></div>
+
+<section class="pt-28 pb-12 text-center">
+  <div class="max-w-3xl mx-auto px-4">
+    <div class="section-tag">Coverage</div>
+    <h1 class="text-5xl font-extrabold text-white mt-3 mb-4" style="font-family:Syne,sans-serif;">Our <span class="gradient-text">Coverage Map</span></h1>
+    <p class="text-[#8BA4C8]">Check if our fiber and enterprise telecom services are available in your area. Expanding to East Malaysia in 2026.</p>
+  </div>
+</section>
+
+<section class="pb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Legend -->
+    <div class="flex flex-wrap gap-4 mb-6 justify-center">
+      <div class="flex items-center gap-2 text-sm text-[#8BA4C8]"><span class="w-3 h-3 rounded-full bg-[#4DA3FF] inline-block"></span> Full Coverage (Fiber + Wireless)</div>
+      <div class="flex items-center gap-2 text-sm text-[#8BA4C8]"><span class="w-3 h-3 rounded-full bg-green-400 inline-block"></span> Fiber Available</div>
+      <div class="flex items-center gap-2 text-sm text-[#8BA4C8]"><span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span> Coming Soon</div>
+    </div>
+    <div id="coverage-map"></div>
+  </div>
+</section>
+
+<!-- Coverage list -->
+<section class="pb-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold text-white mb-6" style="font-family:Syne,sans-serif;">Coverage Areas</h2>
+    <div id="coverage-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="service-card p-4 animate-pulse h-20"></div>
+      <div class="service-card p-4 animate-pulse h-20"></div>
+      <div class="service-card p-4 animate-pulse h-20"></div>
+    </div>
+    <div class="mt-10 service-card p-8 text-center" style="background:linear-gradient(135deg,rgba(24,95,165,0.15),rgba(6,14,30,0.8))">
+      <h3 class="text-xl font-bold text-white mb-2" style="font-family:Syne,sans-serif;">Don't see your area?</h3>
+      <p class="text-[#8BA4C8] text-sm mb-4">We're expanding rapidly. Submit an enquiry and we'll notify you when we reach your location.</p>
+      <a href="/pages/contact.html" class="btn-primary">Request Coverage</a>
+    </div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+document.getElementById('nav-root').innerHTML = components.getNavHTML('coverage');
+document.getElementById('footer-root').innerHTML = components.getFooterHTML();
+
+var map = L.map('coverage-map', { center: [4.0, 109.5], zoom: 6, zoomControl: true });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap contributors © CARTO', subdomains: 'abcd', maxZoom: 19
+}).addTo(map);
+
+function makeIcon(color) {
+  return L.divIcon({ className: '', html: '<div style="width:14px;height:14px;border-radius:50%;background:'+color+';border:2px solid #fff;box-shadow:0 0 10px '+color+'88;"></div>', iconSize:[14,14], iconAnchor:[7,7] });
+}
+
+api.get('/coverage').then(function(d) {
+  var colors = { full:'#4DA3FF', fiber:'#4ADE80', wireless:'#FACC15', satellite:'#F97316' };
+  var statusColors = { available:'#4DA3FF', coming_soon:'#FACC15', unavailable:'#6B7280' };
+
+  d.areas.forEach(function(a) {
+    if (!a.lat || !a.lng) return;
+    var color = statusColors[a.status] || '#4DA3FF';
+    L.marker([parseFloat(a.lat), parseFloat(a.lng)], { icon: makeIcon(color) })
+      .addTo(map)
+      .bindPopup('<div style="background:#0D1F3C;color:#E8F0FC;padding:10px;border-radius:8px;font-family:Inter,sans-serif;min-width:160px;"><strong style="font-family:Syne,sans-serif;font-size:14px;">'+a.city+'</strong><br/><span style="color:#8BA4C8;font-size:12px;">'+a.state+'</span><br/><span style="color:'+color+';font-size:11px;text-transform:capitalize;margin-top:4px;display:block;">'+a.status.replace('_',' ')+' · '+a.coverage_type+'</span></div>', { className: 'custom-popup' });
+  });
+
+  var statLabels = { available:'Available', coming_soon:'Coming Soon', unavailable:'Unavailable' };
+  var statBadge = { available:'status-up', coming_soon:'status-warning', unavailable:'status-down' };
+  document.getElementById('coverage-list').innerHTML = d.areas.map(function(a) {
+    return '<div class="service-card p-4 flex items-center gap-4"><div><div class="font-semibold text-white text-sm">'+a.city+'</div><div class="text-[#8BA4C8] text-xs">'+a.state+' · '+a.coverage_type+'</div></div><span class="ml-auto status-badge '+(statBadge[a.status]||'status-warning')+' text-xs capitalize whitespace-nowrap">'+(statLabels[a.status]||a.status)+'</span></div>';
+  }).join('');
+}).catch(function() {
+  document.getElementById('coverage-list').innerHTML = '<div class="col-span-3 text-center text-[#8BA4C8] py-8">Unable to load coverage data.</div>';
+});
+</script>
+</body>
+</html>
