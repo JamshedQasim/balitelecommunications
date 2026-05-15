@@ -54,7 +54,7 @@ api.get('/invoices/my').then(function(d){
     return '<tr class="border-b border-white/5 hover:bg-white/2">' +
       '<td class="px-6 py-4 text-white font-medium">' + inv.invoice_no + '</td>' +
       '<td class="px-4 py-4 text-[#8BA4C8]">' + (inv.period_start||'-') + '</td>' +
-      '<td class="px-4 py-4 text-white">RM' + parseFloat(inv.total_amount).toFixed(2) + '</td>' +
+      '<td class="px-4 py-4 text-white">PKR ' + parseFloat(inv.total_amount).toFixed(2) + '</td>' +
       '<td class="px-4 py-4 text-[#8BA4C8]">' + (inv.due_date||'-') + '</td>' +
       '<td class="px-4 py-4"><span class="status-badge ' + (sc[inv.status]||'status-warning') + ' text-xs capitalize">' + inv.status + '</span></td>' +
       '</tr>';

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>System Status — Bali Telecommunications</title>
+  <meta name="description" content="Real-time operational status of Bali Telecommunications network and services."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/custom.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    .status-dot {
+      width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0;
+    }
+    .dot-operational { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.6); }
+    .dot-degraded    { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.6); }
+    .dot-outage      { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
+    .dot-maintenance { background: #8b5cf6; box-shadow: 0 0 8px rgba(139,92,246,0.6); }
+
+    @keyframes pulse-green { 0%,100%{box-shadow:0 0 8px rgba(34,197,94,0.6)} 50%{box-shadow:0 0 18px rgba(34,197,94,1)} }
+    .dot-operational { animation: pulse-green 2.5s ease-in-out infinite; }
+
+    .uptime-bar {
+      display: flex; gap: 2px; align-items: flex-end; height: 32px;
+    }
+    .uptime-day {
+      flex: 1; border-radius: 2px; min-width: 3px; cursor: default; transition: opacity .15s;
+    }
+    .uptime-day:hover { opacity: 0.75; }
+
+    .incident-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: .03em;
+      border: 1px solid;
+    }
+    .badge-resolved    { background:rgba(34,197,94,.1);  color:#86efac; border-color:rgba(34,197,94,.25); }
+    .badge-monitoring  { background:rgba(245,158,11,.1); color:#fcd34d; border-color:rgba(245,158,11,.25); }
+    .badge-investigating{ background:rgba(239,68,68,.1); color:#fca5a5; border-color:rgba(239,68,68,.25); }
+    .badge-maintenance { background:rgba(139,92,246,.1); color:#c4b5fd; border-color:rgba(139,92,246,.25); }
+
+    .overall-banner {
+      border-radius: 16px; padding: 28px 32px;
+      background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(34,197,94,0.04));
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+    .metric-card {
+      background: rgba(13,31,60,0.7); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 20px 24px;
+    }
+    .region-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: #4DA3FF; background: rgba(77,163,255,.1); border: 1px solid rgba(77,163,255,.2);
+      padding: 2px 8px; border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="network-bg">
+<div id="nav-root"></div>
+
+<!-- Hero -->
+<section class="pt-28 pb-12">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Overall banner -->
+    <div class="overall-banner mb-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);">
+          <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-2xl font-extrabold text-white" style="font-family:Syne,sans-serif;">All Systems Operational</h1>
+          <p class="text-green-400/80 text-sm mt-0.5">No incidents detected across all regions</p>
+        </div>
+      </div>
+      <div class="sm:ml-auto text-right">
+        <p class="text-[#8BA4C8] text-xs">Last checked</p>
+        <p id="last-updated" class="text-white text-sm font-semibold">—</p>
+      </div>
+    </div>
+
+    <!-- Key metrics -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+      <div class="metric-card">
+        <p class="text-[#8BA4C8] text-xs mb-1 uppercase tracking-wider">Network Uptime</p>
+        <p class="text-3xl font-extrabold text-white" style="font-family:Syne,sans-serif;">99.98<span class="text-lg text-[#4DA3FF]">%</span></p>
+        <p class="text-green-400 text-xs mt-1">Last 30 days</p>
+      </div>
+      <div class="metric-card">
+        <p class="text-[#8BA4C8] text-xs mb-1 uppercase tracking-wider">Avg Latency</p>
+        <p class="text-3xl font-extrabold text-white" style="font-family:Syne,sans-serif;">4<span class="text-lg text-[#4DA3FF]">ms</span></p>
+        <p class="text-green-400 text-xs mt-1">Core backbone</p>
+      </div>
+      <div class="metric-card">
+        <p class="text-[#8BA4C8] text-xs mb-1 uppercase tracking-wider">Active PoPs</p>
+        <p class="text-3xl font-extrabold text-white" style="font-family:Syne,sans-serif;">12<span class="text-lg text-[#4DA3FF]">/ 12</span></p>
+        <p class="text-green-400 text-xs mt-1">All online</p>
+      </div>
+      <div class="metric-card">
+        <p class="text-[#8BA4C8] text-xs mb-1 uppercase tracking-wider">Open Incidents</p>
+        <p class="text-3xl font-extrabold text-white" style="font-family:Syne,sans-serif;">0</p>
+        <p class="text-green-400 text-xs mt-1">Clean slate</p>
+      </div>
+    </div>
+
+    <!-- Services status -->
+    <div class="mb-3 flex items-center justify-between">
+      <h2 class="text-lg font-bold text-white" style="font-family:Syne,sans-serif;">Service Status</h2>
+      <span class="section-tag text-xs">Live</span>
+    </div>
+    <div class="service-card overflow-hidden mb-10">
+      <div id="services-list">
+        <!-- injected by JS -->
+      </div>
+    </div>
+
+    <!-- 90-day uptime -->
+    <div class="mb-3">
+      <h2 class="text-lg font-bold text-white" style="font-family:Syne,sans-serif;">90-Day Uptime History</h2>
+      <p class="text-[#8BA4C8] text-sm">Per-service daily availability — hover for date</p>
+    </div>
+    <div class="service-card p-6 mb-10" id="uptime-section">
+      <!-- injected by JS -->
+    </div>
+
+    <!-- Network regions -->
+    <div class="mb-3">
+      <h2 class="text-lg font-bold text-white" style="font-family:Syne,sans-serif;">Network Regions</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+      <!-- Regions cards injected by JS -->
+      <div id="regions-grid" class="contents"></div>
+    </div>
+
+    <!-- Incident history -->
+    <div class="mb-3 flex items-center justify-between">
+      <h2 class="text-lg font-bold text-white" style="font-family:Syne,sans-serif;">Incident History</h2>
+      <span class="text-[#8BA4C8] text-xs">Last 30 days</span>
+    </div>
+    <div class="space-y-4 mb-12" id="incident-history">
+      <!-- injected by JS -->
+    </div>
+
+    <!-- Subscribe / contact -->
+    <div class="service-card p-8 text-center" style="background:linear-gradient(135deg,rgba(24,95,165,0.18),rgba(37,128,232,0.08))">
+      <h2 class="text-xl font-bold text-white mb-2" style="font-family:Syne,sans-serif;">Get Status Alerts</h2>
+      <p class="text-[#8BA4C8] text-sm mb-6 max-w-md mx-auto">Receive instant email notifications for incidents, maintenance windows, and resolutions.</p>
+      <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <input type="email" id="sub-email" class="form-input flex-1" placeholder="your@company.com" required/>
+        <button type="submit" class="btn-primary whitespace-nowrap">Subscribe</button>
+      </form>
+      <p id="sub-msg" class="text-green-400 text-sm mt-3" style="display:none">✓ You're subscribed to status alerts.</p>
+      <p class="text-[#8BA4C8] text-xs mt-4">Or contact our NOC directly: <a href="tel:+922111234567" class="text-[#4DA3FF] hover:underline">+92 21-111-234-567</a> (24/7)</p>
+    </div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<a id="whatsapp-btn" href="#" data-number="923001234567" target="_blank" aria-label="WhatsApp"></a>
+
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>
+document.getElementById('nav-root').innerHTML = components.getNavHTML('support');
+document.getElementById('footer-root').innerHTML = components.getFooterHTML();
+
+// ── Data ────────────────────────────────────────────────────────────────────
+var SERVICES = [
+  { name:'Fiber Internet',           icon:'📡', uptime:99.98, latency:'3ms',  status:'operational' },
+  { name:'VoIP Solutions',           icon:'📞', uptime:99.96, latency:'8ms',  status:'operational' },
+  { name:'Cloud Communications',     icon:'☁️',  uptime:99.95, latency:'12ms', status:'operational' },
+  { name:'Managed IT Services',      icon:'🖥️', uptime:99.97, latency:'—',    status:'operational' },
+  { name:'Security Systems',         icon:'🛡️', uptime:99.99, latency:'2ms',  status:'operational' },
+  { name:'Network Infrastructure',   icon:'🔗', uptime:99.98, latency:'4ms',  status:'operational' },
+  { name:'Client Portal',            icon:'👤', uptime:99.90, latency:'45ms', status:'operational' },
+  { name:'DNS & Routing',            icon:'🌐', uptime:99.99, latency:'1ms',  status:'operational' },
+  { name:'NOC Monitoring',           icon:'📊', uptime:100,   latency:'—',    status:'operational' },
+];
+
+var REGIONS = [
+  { name:'Karachi (Primary)',       code:'KHI', status:'operational', latency:'2ms',  pop:'4 PoPs' },
+  { name:'Lahore',                  code:'LHR', status:'operational', latency:'6ms',  pop:'2 PoPs' },
+  { name:'Islamabad',               code:'ISB', status:'operational', latency:'8ms',  pop:'2 PoPs' },
+  { name:'Rawalpindi',              code:'RWP', status:'operational', latency:'12ms', pop:'1 PoP'  },
+  { name:'Faisalabad',              code:'LYP', status:'operational', latency:'14ms', pop:'1 PoP'  },
+  { name:'Karachi Data Centre',     code:'DC1', status:'operational', latency:'1ms',  pop:'1 DC'   },
+];
+
+var INCIDENTS = [
+  {
+    date: 'May 8, 2026',
+    title: 'Elevated Latency — Lahore Region',
+    updates: [
+      { time:'14:32 PKT', status:'resolved',     text:'All services restored. Root cause: upstream fiber cut by third-party contractor. Redundant path activated within 4 minutes.' },
+      { time:'13:55 PKT', status:'monitoring',   text:'Traffic rerouted via backup path. Monitoring for stability.' },
+      { time:'13:41 PKT', status:'investigating', text:'Investigating elevated latency reports from Lahore PoP. Engineers on site.' },
+    ]
+  },
+  {
+    date: 'Apr 21, 2026',
+    title: 'Scheduled Maintenance — Karachi Core Router Upgrade',
+    updates: [
+      { time:'03:00 PKT', status:'resolved',     text:'Maintenance completed successfully. All services restored ahead of schedule.' },
+      { time:'01:00 PKT', status:'maintenance',  text:'Maintenance window begun. Redundant paths carrying all traffic. No customer impact expected.' },
+    ]
+  },
+  {
+    date: 'Mar 30, 2026',
+    title: 'VoIP Quality Degradation — Nationwide',
+    updates: [
+      { time:'09:14 PKT', status:'resolved',     text:'SIP proxy cluster fully recovered. Call quality restored. Post-mortem scheduled for Apr 3.' },
+      { time:'08:50 PKT', status:'monitoring',   text:'Fix deployed. Monitoring call quality metrics.' },
+      { time:'08:22 PKT', status:'investigating', text:'SIP proxy cluster experiencing high load. Engineering team engaged.' },
+    ]
+  },
+];
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+var STATUS_LABEL = { operational:'Operational', degraded:'Degraded Performance', outage:'Service Outage', maintenance:'Maintenance' };
+var STATUS_COLOR = { operational:'text-green-400', degraded:'text-yellow-400', outage:'text-red-400', maintenance:'text-purple-400' };
+var DOT_CLASS    = { operational:'dot-operational', degraded:'dot-degraded', outage:'dot-outage', maintenance:'dot-maintenance' };
+var BADGE_CLASS  = { resolved:'badge-resolved', monitoring:'badge-monitoring', investigating:'badge-investigating', maintenance:'badge-maintenance' };
+
+function statusDot(s) {
+  return '<span class="status-dot ' + (DOT_CLASS[s]||'dot-operational') + '"></span>';
+}
+
+// ── Last updated ─────────────────────────────────────────────────────────────
+function updateTimestamp() {
+  var now = new Date();
+  document.getElementById('last-updated').textContent = now.toLocaleTimeString('en-PK', { hour:'2-digit', minute:'2-digit', second:'2-digit' }) + ' PKT';
+}
+updateTimestamp();
+setInterval(updateTimestamp, 30000);
+
+// ── Service rows ─────────────────────────────────────────────────────────────
+document.getElementById('services-list').innerHTML = SERVICES.map(function(s, i) {
+  var border = i < SERVICES.length - 1 ? 'border-b border-white/5' : '';
+  return '<div class="flex items-center gap-4 px-6 py-4 ' + border + ' hover:bg-white/[0.02] transition-colors">' +
+    '<span class="text-xl w-8 text-center flex-shrink-0">' + s.icon + '</span>' +
+    '<span class="text-white text-sm font-medium flex-1" style="font-family:Syne,sans-serif;">' + s.name + '</span>' +
+    '<span class="text-[#8BA4C8] text-xs hidden sm:block w-20 text-right">' + s.latency + ' latency</span>' +
+    '<span class="text-[#8BA4C8] text-xs hidden md:block w-24 text-right">' + s.uptime + '% SLA</span>' +
+    '<div class="flex items-center gap-2 w-32 justify-end">' + statusDot(s.status) +
+      '<span class="text-xs font-semibold ' + (STATUS_COLOR[s.status]||'text-green-400') + '">' + STATUS_LABEL[s.status] + '</span>' +
+    '</div>' +
+  '</div>';
+}).join('');
+
+// ── 90-day uptime bars ────────────────────────────────────────────────────────
+function generateUptimeDays(uptime) {
+  var days = [];
+  var now = new Date();
+  for (var i = 89; i >= 0; i--) {
+    var d = new Date(now); d.setDate(d.getDate() - i);
+    var label = d.toLocaleDateString('en-PK', { day:'numeric', month:'short' });
+    // slight random variation around uptime; guarantee last 7 days are 100%
+    var pct = i < 7 ? 100 : Math.random() > 0.97 ? Math.round(85 + Math.random() * 12) : 100;
+    var color = pct === 100 ? '#22c55e' : pct >= 95 ? '#f59e0b' : '#ef4444';
+    var height = 14 + (pct / 100) * 18;
+    days.push({ label:label, pct:pct, color:color, height:height });
+  }
+  return days;
+}
+
+var uptimeHTML = SERVICES.slice(0, 5).map(function(s) {
+  var days = generateUptimeDays(s.uptime);
+  var bars = days.map(function(d) {
+    return '<div class="uptime-day" style="height:' + d.height + 'px;background:' + d.color + ';opacity:0.85;" title="' + d.label + ': ' + d.pct + '% uptime"></div>';
+  }).join('');
+  return '<div class="mb-5 last:mb-0">' +
+    '<div class="flex items-center justify-between mb-2">' +
+      '<span class="text-white text-sm font-medium" style="font-family:Syne,sans-serif;">' + s.icon + ' ' + s.name + '</span>' +
+      '<span class="text-green-400 text-xs font-semibold">' + s.uptime + '% uptime</span>' +
+    '</div>' +
+    '<div class="uptime-bar">' + bars + '</div>' +
+    '<div class="flex justify-between text-[#8BA4C8] text-xs mt-1"><span>90 days ago</span><span>Today</span></div>' +
+  '</div>';
+}).join('');
+document.getElementById('uptime-section').innerHTML = uptimeHTML;
+
+// ── Regions grid ──────────────────────────────────────────────────────────────
+document.getElementById('regions-grid').innerHTML = REGIONS.map(function(r) {
+  return '<div class="service-card p-5 flex items-start gap-4">' +
+    '<div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(77,163,255,0.1);border:1px solid rgba(77,163,255,0.2);">' +
+      '<svg class="w-5 h-5 text-[#4DA3FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>' +
+    '</div>' +
+    '<div class="flex-1 min-w-0">' +
+      '<div class="flex items-center gap-2 mb-0.5">' +
+        '<span class="text-white text-sm font-semibold" style="font-family:Syne,sans-serif;">' + r.name + '</span>' +
+      '</div>' +
+      '<div class="flex items-center gap-2 mb-2">' +
+        '<span class="region-tag">' + r.code + '</span>' +
+        '<span class="text-[#8BA4C8] text-xs">' + r.pop + '</span>' +
+      '</div>' +
+      '<div class="flex items-center justify-between">' +
+        '<span class="text-[#8BA4C8] text-xs">' + r.latency + ' avg latency</span>' +
+        '<div class="flex items-center gap-1.5">' + statusDot(r.status) +
+          '<span class="text-xs font-semibold ' + (STATUS_COLOR[r.status]) + '">' + STATUS_LABEL[r.status] + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}).join('');
+
+// ── Incident history ──────────────────────────────────────────────────────────
+if (!INCIDENTS.length) {
+  document.getElementById('incident-history').innerHTML =
+    '<div class="service-card p-6 text-center text-[#8BA4C8] text-sm">No incidents in the last 30 days.</div>';
+} else {
+  document.getElementById('incident-history').innerHTML = INCIDENTS.map(function(inc) {
+    var updates = inc.updates.map(function(u) {
+      return '<div class="flex items-start gap-3 py-3 border-b border-white/5 last:border-0">' +
+        '<span class="text-[#8BA4C8] text-xs w-24 flex-shrink-0 pt-0.5">' + u.time + '</span>' +
+        '<div>' +
+          '<span class="incident-badge ' + (BADGE_CLASS[u.status]||'badge-resolved') + ' mb-1.5 inline-flex">' + u.status.charAt(0).toUpperCase() + u.status.slice(1) + '</span>' +
+          '<p class="text-[#8BA4C8] text-sm leading-relaxed">' + u.text + '</p>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    return '<div class="service-card overflow-hidden">' +
+      '<div class="px-6 py-4 border-b border-white/5 flex items-center justify-between">' +
+        '<div>' +
+          '<p class="text-[#8BA4C8] text-xs mb-0.5">' + inc.date + '</p>' +
+          '<h3 class="text-white font-semibold text-sm" style="font-family:Syne,sans-serif;">' + inc.title + '</h3>' +
+        '</div>' +
+        '<span class="incident-badge badge-resolved">Resolved</span>' +
+      '</div>' +
+      '<div class="px-6">' + updates + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Subscribe form ────────────────────────────────────────────────────────────
+document.getElementById('subscribe-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var email = document.getElementById('sub-email').value;
+  if (!email) return;
+  document.getElementById('subscribe-form').style.display = 'none';
+  document.getElementById('sub-msg').style.display = 'block';
+});
+</script>
+</body>
+</html>

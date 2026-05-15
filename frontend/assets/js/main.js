@@ -135,56 +135,214 @@ function initHeroCanvas() {
   const canvas = document.getElementById('hero-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let w, h, nodes = [], edges = [];
+  let w, h, nodes = [], packets = [], bgRings = [], animId;
+  let mouse = { x: -9999, y: -9999 };
+  const MAX_D = 170;
+  const PACKET_CAP = 55;
 
   function resize() {
     w = canvas.width = canvas.offsetWidth;
     h = canvas.height = canvas.offsetHeight;
   }
 
-  function createNodes(count = 50) {
-    nodes = Array.from({ length: count }, () => ({
-      x: Math.random() * w, y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 2 + 1
+  function init() {
+    const mobile = w < 640;
+    const total = mobile ? 38 : 70;
+    const hubCount = mobile ? 5 : 10;
+
+    nodes = Array.from({ length: total }, (_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2,
+      r: i < hubCount ? Math.random() * 2.5 + 3.5 : Math.random() * 1.5 + 0.8,
+      isHub: i < hubCount,
+      phase: Math.random() * Math.PI * 2,
+      phaseSpd: 0.012 + Math.random() * 0.014
     }));
+
+    bgRings = Array.from({ length: mobile ? 3 : 6 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: 70 + Math.random() * 130,
+      phase: Math.random() * Math.PI * 2,
+      spd: 0.004 + Math.random() * 0.003
+    }));
+
+    packets = [];
   }
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    nodes.forEach(n => {
-      n.x += n.vx; n.y += n.vy;
-      if (n.x < 0 || n.x > w) n.vx *= -1;
-      if (n.y < 0 || n.y > h) n.vy *= -1;
+
+    // Background orbital rings
+    bgRings.forEach(ring => {
+      ring.phase += ring.spd;
+      const r1 = ring.r + Math.sin(ring.phase) * 14;
+      const r2 = ring.r * 1.6 + Math.sin(ring.phase + 1.2) * 20;
+      ctx.beginPath();
+      ctx.arc(ring.x, ring.y, r1, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(24,95,165,${0.045 + Math.sin(ring.phase) * 0.02})`;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(ring.x, ring.y, r2, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(37,128,232,${0.022 + Math.sin(ring.phase + 1.2) * 0.01})`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
     });
+
+    // Move nodes
+    nodes.forEach(n => {
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < -45) n.x = w + 45;
+      if (n.x > w + 45) n.x = -45;
+      if (n.y < -45) n.y = h + 45;
+      if (n.y > h + 45) n.y = -45;
+      n.phase += n.phaseSpd;
+
+      // Mouse repulsion
+      const dx = n.x - mouse.x;
+      const dy = n.y - mouse.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 14000 && d2 > 1) {
+        const d = Math.sqrt(d2);
+        const f = Math.min(2.5, 110 / d);
+        n.x += (dx / d) * f;
+        n.y += (dy / d) * f;
+      }
+    });
+
+    // Build edges and draw connections
+    const edgeList = [];
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
         const dx = nodes[i].x - nodes[j].x;
         const dy = nodes[i].y - nodes[j].y;
         const d = Math.sqrt(dx * dx + dy * dy);
-        if (d < 140) {
+        if (d < MAX_D) {
+          edgeList.push([i, j]);
+          const f = 1 - d / MAX_D;
+          const hubEdge = nodes[i].isHub || nodes[j].isHub;
           ctx.beginPath();
-          ctx.strokeStyle = `rgba(37,128,232,${0.25 * (1 - d / 140)})`;
-          ctx.lineWidth = 0.5;
+          ctx.strokeStyle = hubEdge
+            ? `rgba(37,128,232,${f * 0.55})`
+            : `rgba(37,128,232,${f * 0.28})`;
+          ctx.lineWidth = hubEdge ? 0.9 : 0.45;
           ctx.moveTo(nodes[i].x, nodes[i].y);
           ctx.lineTo(nodes[j].x, nodes[j].y);
           ctx.stroke();
         }
       }
     }
+
+    // Spawn packets along existing edges
+    if (edgeList.length && Math.random() < 0.09 && packets.length < PACKET_CAP) {
+      const [a, b] = edgeList[Math.floor(Math.random() * edgeList.length)];
+      const rev = Math.random() > 0.5;
+      packets.push({ a: rev ? b : a, b: rev ? a : b, t: 0, spd: 0.0045 + Math.random() * 0.005 });
+    }
+
+    // Hub pulse rings (3 rings per hub)
     nodes.forEach(n => {
+      if (!n.isHub) return;
+      for (let ring = 1; ring <= 3; ring++) {
+        const rr = n.r + ring * 5.5 + Math.sin(n.phase * 0.65 * ring) * 4;
+        const alpha = (0.2 / ring) * (0.55 + Math.sin(n.phase) * 0.45);
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, rr, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(77,163,255,${alpha})`;
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+      }
+    });
+
+    // Draw nodes
+    nodes.forEach(n => {
+      if (n.isHub) {
+        // Soft radial glow for hubs
+        const g = ctx.createRadialGradient(n.x, n.y, n.r * 0.3, n.x, n.y, n.r * 5.5);
+        g.addColorStop(0, 'rgba(77,163,255,0.22)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * 5.5, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+      }
+      // Core circle
+      const gAlpha = n.isHub ? 0.8 + Math.sin(n.phase) * 0.2 : 0.65;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(77,163,255,0.6)';
+      ctx.fillStyle = `rgba(77,163,255,${gAlpha})`;
+      ctx.fill();
+      // Bright inner core for hubs
+      if (n.isHub) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * 0.45, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(210,235,255,0.92)';
+        ctx.fill();
+      }
+    });
+
+    // Update and draw data packets
+    packets = packets.filter(p => p.t <= 1);
+    packets.forEach(p => {
+      p.t = Math.min(1, p.t + p.spd);
+      const na = nodes[p.a], nb = nodes[p.b];
+      const x = na.x + (nb.x - na.x) * p.t;
+      const y = na.y + (nb.y - na.y) * p.t;
+
+      // Tail segments
+      const TAIL = 12;
+      for (let k = TAIL; k >= 0; k--) {
+        const tt = Math.max(0, p.t - k * 0.016);
+        const tx = na.x + (nb.x - na.x) * tt;
+        const ty = na.y + (nb.y - na.y) * tt;
+        const tailAlpha = (1 - k / TAIL) * 0.7;
+        const tailR = k === 0 ? 2.4 : Math.max(0.15, 1.9 - k * 0.15);
+        ctx.beginPath();
+        ctx.arc(tx, ty, tailR, 0, Math.PI * 2);
+        ctx.fillStyle = k === 0
+          ? 'rgba(255,255,255,0.97)'
+          : `rgba(147,197,253,${tailAlpha})`;
+        ctx.fill();
+      }
+
+      // Head glow halo
+      const hg = ctx.createRadialGradient(x, y, 0, x, y, 9);
+      hg.addColorStop(0, 'rgba(200,230,255,0.45)');
+      hg.addColorStop(1, 'rgba(77,163,255,0)');
+      ctx.beginPath();
+      ctx.arc(x, y, 9, 0, Math.PI * 2);
+      ctx.fillStyle = hg;
       ctx.fill();
     });
-    requestAnimationFrame(draw);
+
+    animId = requestAnimationFrame(draw);
   }
 
+  // Track mouse through window (canvas is pointer-events:none)
+  window.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    if (e.clientY >= rect.top && e.clientY <= rect.bottom + 40) {
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    } else {
+      mouse.x = -9999; mouse.y = -9999;
+    }
+  });
+
   resize();
-  createNodes();
+  init();
   draw();
-  window.addEventListener('resize', () => { resize(); createNodes(); });
+
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(animId);
+    resize();
+    init();
+    draw();
+  });
 }
 
 // ── Network Status ────────────────────────────────────
@@ -193,9 +351,9 @@ async function initNetworkStatus() {
   if (!el) return;
   try {
     await api.get('/health');
-    el.innerHTML = '<span class="status-badge status-up"><span class="dot-pulse"></span> All Systems Operational</span>';
+    el.innerHTML = '<a href="/pages/status.html" class="status-badge status-up" style="text-decoration:none;"><span class="dot-pulse"></span> All Systems Operational</a>';
   } catch {
-    el.innerHTML = '<span class="status-badge status-warning"><span class="dot-pulse"></span> Checking status...</span>';
+    el.innerHTML = '<a href="/pages/status.html" class="status-badge status-warning" style="text-decoration:none;"><span class="dot-pulse"></span> Checking status...</a>';
   }
 }
 
@@ -203,7 +361,7 @@ async function initNetworkStatus() {
 function initWhatsApp() {
   const btn = document.getElementById('whatsapp-btn');
   if (!btn) return;
-  const num = btn.dataset.number || '60123456789';
+  const num = btn.dataset.number || '923001234567';
   btn.href = `https://wa.me/${num}?text=Hello%2C%20I%27m%20interested%20in%20your%20telecom%20services.`;
 }
 

@@ -74,7 +74,7 @@ function getFooterHTML() {
               </div>
               <span class="font-bold text-white" style="font-family:'Syne',sans-serif;">Bali<span class="text-[#4DA3FF]">Telecom</span></span>
             </div>
-            <p class="text-[#8BA4C8] text-sm leading-relaxed mb-6">Future-ready telecommunications infrastructure for businesses across Malaysia. Enterprise-grade connectivity, 24/7 support.</p>
+            <p class="text-[#8BA4C8] text-sm leading-relaxed mb-6">Future-ready telecommunications infrastructure for businesses across Pakistan. Enterprise-grade connectivity, 24/7 support.</p>
             <div class="flex gap-3">
               <a href="#" class="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors text-[#8BA4C8] hover:text-white text-xs">in</a>
               <a href="#" class="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors text-[#8BA4C8] hover:text-white text-xs">tw</a>
@@ -96,12 +96,12 @@ function getFooterHTML() {
           <div>
             <h4 class="text-white font-semibold text-sm mb-4" style="font-family:'Syne',sans-serif;">Support</h4>
             <ul class="space-y-2">
-              ${[['Support','/pages/support.html'],['Contact Us','/pages/contact.html'],['Client Portal','/pages/portal/login.html'],['Privacy Policy','#'],['Terms & Conditions','#']].map(([l,h]) => `<li><a href="${h}" class="text-[#8BA4C8] hover:text-white text-sm transition-colors">${l}</a></li>`).join('')}
+              ${[['Support','/pages/support.html'],['Contact Us','/pages/contact.html'],['System Status','/pages/status.html'],['Client Portal','/pages/portal/login.html'],['Privacy Policy','#'],['Terms & Conditions','#']].map(([l,h]) => `<li><a href="${h}" class="text-[#8BA4C8] hover:text-white text-sm transition-colors">${l}</a></li>`).join('')}
             </ul>
             <div class="mt-6 space-y-2">
-              <a href="tel:+60312345678" class="flex items-center gap-2 text-[#8BA4C8] hover:text-white text-sm transition-colors">
+              <a href="tel:+922111234567" class="flex items-center gap-2 text-[#8BA4C8] hover:text-white text-sm transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                +603-1234-5678
+                +92 21-111-234-567
               </a>
               <a href="mailto:info@balitelecommunications.com" class="flex items-center gap-2 text-[#8BA4C8] hover:text-white text-sm transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -111,8 +111,8 @@ function getFooterHTML() {
           </div>
         </div>
         <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p class="text-[#8BA4C8] text-xs">© 2026 Bali Telecommunications Sdn Bhd. All rights reserved. (SSM: 1234567-X)</p>
-          <p class="text-[#8BA4C8] text-xs">99.9% Network Uptime · 24/7 Technical Support · Enterprise-Grade Infrastructure</p>
+          <p class="text-[#8BA4C8] text-xs">© 2026 Bali Telecommunications (Pvt) Ltd. All rights reserved. (SECP: 0123456)</p>
+          <p class="text-[#8BA4C8] text-xs">99.9% Network Uptime · 24/7 Technical Support · Serving Businesses Across Pakistan</p>
         </div>
       </div>
     </footer>`;

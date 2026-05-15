@@ -52,10 +52,15 @@ const strictLimiter = rateLimit({
   message: { error: 'Too many attempts, please try again later.' }
 });
 app.use('/api/auth', strictLimiter);
-app.use('/api/leads', strictLimiter);
+// Only rate-limit POST /api/leads (public form submission), not admin reads/updates
+app.use('/api/leads', (req, res, next) => {
+  if (req.method === 'POST') return strictLimiter(req, res, next);
+  next();
+});
 
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/admin', express.static(path.join(__dirname, '../admin')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes

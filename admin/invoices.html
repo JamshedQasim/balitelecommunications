@@ -2,65 +2,173 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Invoices — Admin</title>
+  <title>Invoices — Admin | BaliTelecom</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/assets/css/custom.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    .nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:#8BA4C8;font-size:14px;transition:all .15s;cursor:pointer;text-decoration:none;}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,0.06);}
+    .nav-item.active{color:#fff;background:rgba(24,95,165,0.35);border:1px solid rgba(24,95,165,0.3);}
+    .nav-item svg{flex-shrink:0;width:16px;height:16px;}
+    .admin-table th{padding:12px 16px;font-size:11px;font-weight:600;color:#8BA4C8;text-align:left;border-bottom:1px solid rgba(255,255,255,0.07);white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;}
+    .admin-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle;}
+    .admin-table tr:last-child td{border-bottom:none;}
+    .admin-table tr:hover td{background:rgba(255,255,255,0.015);}
+    .filter-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,0.1);color:#8BA4C8;transition:all .15s;cursor:pointer;background:transparent;}
+    .filter-btn.active,.filter-btn:hover{color:#fff;background:rgba(24,95,165,0.3);border-color:rgba(24,95,165,0.5);}
+  </style>
 </head>
 <body class="network-bg min-h-screen">
-<div class="flex min-h-screen">
-  <aside class="w-64 bg-[#05090F] border-r border-white/10 flex flex-col fixed h-full z-50">
-    <div class="p-6 border-b border-white/10"><div class="text-white font-bold text-sm" style="font-family:Syne,sans-serif;">BaliTelecom <span class="text-red-400 text-xs">ADMIN</span></div></div>
-    <nav class="flex-1 p-4 space-y-1 text-sm">
-      <a href="/admin/index.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Dashboard</a>
-      <a href="/admin/leads.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Leads</a>
-      <a href="/admin/tickets.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Tickets</a>
-      <a href="/admin/users.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Users</a>
-      <a href="/admin/invoices.html" class="block px-4 py-2.5 rounded-lg bg-white/10 text-white">Invoices</a>
-      <a href="/admin/blog.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">Blog Posts</a>
-    </nav>
-    <div class="p-4 border-t border-white/10"><button id="logout-btn" class="w-full px-4 py-2.5 text-[#8BA4C8] hover:text-red-400 text-sm text-left">Sign Out</button></div>
-  </aside>
-  <main class="ml-64 flex-1 p-8">
-    <div class="max-w-6xl mx-auto">
-      <h1 class="text-2xl font-bold text-white mb-6" style="font-family:Syne,sans-serif;">Invoices</h1>
-      <div class="service-card overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead><tr class="border-b border-white/10 text-left">
-            <th class="px-5 py-4 text-[#8BA4C8] font-medium">Invoice No.</th>
-            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Client</th>
-            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Amount</th>
-            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Due Date</th>
-            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Status</th>
-            <th class="px-4 py-4 text-[#8BA4C8] font-medium">Action</th>
-          </tr></thead>
-          <tbody id="inv-table"><tr><td colspan="6" class="text-center py-8 text-[#8BA4C8]">Loading...</td></tr></tbody>
-        </table>
+
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+<aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-[#05090F] border-r border-white/10 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+  <div class="p-5 border-b border-white/10 flex items-center gap-3">
+    <div class="w-9 h-9 bg-gradient-to-br from-[#185FA5] to-[#2580E8] rounded-xl flex items-center justify-center flex-shrink-0">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+    </div>
+    <div><div class="text-white font-bold text-sm" style="font-family:Syne,sans-serif;">BaliTelecom</div><div class="text-red-400 text-xs font-bold tracking-widest">ADMIN</div></div>
+  </div>
+  <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
+    <a href="/admin/index.html" class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>Dashboard</a>
+    <a href="/admin/leads.html" class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>Leads</a>
+    <a href="/admin/tickets.html" class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>Tickets</a>
+    <a href="/admin/users.html" class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>Users</a>
+    <a href="/admin/invoices.html" class="nav-item active"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Invoices</a>
+    <a href="/admin/blog.html" class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Blog Posts</a>
+  </nav>
+  <div class="p-3 border-t border-white/10 space-y-0.5">
+    <a href="/pages/index.html" class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>View Site</a>
+    <button id="logout-btn" class="nav-item w-full text-left hover:text-red-400 hover:bg-red-500/5"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>Sign Out</button>
+  </div>
+</aside>
+
+<div class="lg:ml-64 flex flex-col min-h-screen">
+  <header class="sticky top-0 z-30 bg-[#05090F]/95 backdrop-blur-sm border-b border-white/10 px-4 sm:px-6 py-3 flex items-center gap-3">
+    <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div>
+      <h1 class="text-white font-bold text-base sm:text-lg" style="font-family:Syne,sans-serif;">Invoices</h1>
+      <p class="text-[#8BA4C8] text-xs hidden sm:block">Track payments and billing</p>
+    </div>
+    <div class="ml-auto flex items-center gap-3">
+      <div class="text-right hidden sm:block">
+        <div class="text-xs text-[#8BA4C8]">Total Revenue</div>
+        <div class="text-white font-bold text-sm" id="total-revenue">PKR —</div>
       </div>
+    </div>
+  </header>
+
+  <main class="flex-1 p-4 sm:p-6 lg:p-8">
+    <div class="max-w-6xl mx-auto space-y-4">
+
+      <!-- Summary cards -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="service-card p-4 text-center">
+          <div class="text-2xl font-bold text-green-400" id="count-paid" style="font-family:Syne,sans-serif;">—</div>
+          <div class="text-[#8BA4C8] text-xs mt-1">Paid</div>
+        </div>
+        <div class="service-card p-4 text-center">
+          <div class="text-2xl font-bold text-yellow-400" id="count-unpaid" style="font-family:Syne,sans-serif;">—</div>
+          <div class="text-[#8BA4C8] text-xs mt-1">Unpaid</div>
+        </div>
+        <div class="service-card p-4 text-center">
+          <div class="text-2xl font-bold text-red-400" id="count-overdue" style="font-family:Syne,sans-serif;">—</div>
+          <div class="text-[#8BA4C8] text-xs mt-1">Overdue</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-2">
+        <button class="filter-btn active" onclick="setFilter('')">All</button>
+        <button class="filter-btn" onclick="setFilter('paid')">Paid</button>
+        <button class="filter-btn" onclick="setFilter('unpaid')">Unpaid</button>
+        <button class="filter-btn" onclick="setFilter('overdue')">Overdue</button>
+      </div>
+
+      <!-- Table desktop -->
+      <div class="service-card overflow-hidden hidden sm:block">
+        <div class="overflow-x-auto">
+          <table class="admin-table w-full">
+            <thead><tr>
+              <th>Invoice No.</th><th>Client</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Action</th>
+            </tr></thead>
+            <tbody id="inv-table"><tr><td colspan="6" class="text-center py-10 text-[#8BA4C8]">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Cards mobile -->
+      <div class="sm:hidden space-y-3" id="inv-cards"><div class="service-card p-5 text-center text-[#8BA4C8] text-sm">Loading...</div></div>
+
     </div>
   </main>
 </div>
+
 <script src="/assets/js/auth.js"></script>
 <script src="/assets/js/main.js"></script>
 <script>
 if (!auth.isAdmin()) { window.location.href = '/pages/portal/login.html'; }
 document.getElementById('logout-btn').addEventListener('click', auth.logout);
-var sc = {paid:'status-up',unpaid:'status-warning',overdue:'status-down'};
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');}
+
+var sc = { paid:'bg-green-500/15 text-green-300 border-green-500/30', unpaid:'bg-yellow-500/15 text-yellow-300 border-yellow-500/30', overdue:'bg-red-500/15 text-red-300 border-red-500/30' };
+var currentFilter = '';
+var allInvoices = [];
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.toggle('active', b.textContent.trim().toLowerCase()===(f||'all')); });
+  renderInvoices();
+}
+
+function renderInvoices() {
+  var inv = currentFilter ? allInvoices.filter(function(i){return i.status===currentFilter;}) : allInvoices;
+  var scTable = {paid:'status-up',unpaid:'status-warning',overdue:'status-down'};
+
+  document.getElementById('inv-table').innerHTML = inv.length ? inv.map(function(i) {
+    var badge = '<span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid;text-transform:capitalize;" class="'+(sc[i.status]||sc.unpaid)+'">'+i.status+'</span>';
+    var action = i.status!=='paid' ? '<button onclick="markPaid('+i.id+')" class="text-xs bg-green-500/10 border border-green-500/30 text-green-400 hover:bg-green-500/20 rounded-lg px-3 py-1.5 transition-colors">Mark Paid</button>' : '<span class="text-[#8BA4C8] text-xs">—</span>';
+    return '<tr><td class="text-white font-mono font-semibold text-xs">'+i.invoice_no+'</td>' +
+      '<td><div class="text-white text-sm font-medium">'+(i.user?i.user.name:'—')+'</div><div class="text-[#8BA4C8] text-xs">'+(i.user?i.user.company||i.user.email:'—')+'</div></td>' +
+      '<td class="text-white font-semibold">PKR '+parseFloat(i.total_amount).toFixed(0)+'</td>' +
+      '<td class="text-[#8BA4C8] text-xs whitespace-nowrap">'+(i.due_date||'—')+'</td>' +
+      '<td>'+badge+'</td><td>'+action+'</td></tr>';
+  }).join('') : '<tr><td colspan="6" class="text-center py-10 text-[#8BA4C8]">No invoices found.</td></tr>';
+
+  document.getElementById('inv-cards').innerHTML = inv.length ? inv.map(function(i) {
+    var badge = '<span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid;text-transform:capitalize;" class="'+(sc[i.status]||sc.unpaid)+'">'+i.status+'</span>';
+    return '<div class="service-card p-4 space-y-3">' +
+      '<div class="flex items-start justify-between gap-2"><div><div class="text-white font-semibold">'+i.invoice_no+'</div><div class="text-[#8BA4C8] text-xs">'+(i.user?i.user.name:'—')+'</div></div>'+badge+'</div>' +
+      '<div class="flex items-center justify-between">' +
+        '<div><div class="text-[#8BA4C8] text-xs">Amount</div><div class="text-white font-bold">PKR '+parseFloat(i.total_amount).toFixed(0)+'</div></div>' +
+        '<div class="text-right"><div class="text-[#8BA4C8] text-xs">Due</div><div class="text-white text-sm">'+(i.due_date||'—')+'</div></div>' +
+      '</div>' +
+      (i.status!=='paid'?'<button onclick="markPaid('+i.id+')" class="w-full text-xs bg-green-500/10 border border-green-500/30 text-green-400 rounded-lg py-2 hover:bg-green-500/20 transition-colors">Mark as Paid</button>':'') +
+    '</div>';
+  }).join('') : '<div class="service-card p-5 text-center text-[#8BA4C8] text-sm">No invoices found.</div>';
+}
+
 async function load() {
   try {
-    var d = await api.get('/invoices/all?limit=50');
-    document.getElementById('inv-table').innerHTML = d.invoices.length ? d.invoices.map(function(inv) {
-      var dt = inv.due_date || '-';
-      return '<tr class="border-b border-white/5 hover:bg-white/2">' +
-        '<td class="px-5 py-3 text-white font-medium text-xs">'+inv.invoice_no+'</td>' +
-        '<td class="px-4 py-3"><div class="text-white text-xs">'+(inv.user?inv.user.name:'-')+'</div><div class="text-[#8BA4C8] text-xs">'+(inv.user?inv.user.company||'':'-')+'</div></td>' +
-        '<td class="px-4 py-3 text-white font-semibold text-xs">RM'+parseFloat(inv.total_amount).toFixed(2)+'</td>' +
-        '<td class="px-4 py-3 text-[#8BA4C8] text-xs">'+dt+'</td>' +
-        '<td class="px-4 py-3"><span class="status-badge '+(sc[inv.status]||'status-warning')+' text-xs capitalize">'+inv.status+'</span></td>' +
-        '<td class="px-4 py-3">'+(inv.status!=='paid'?'<button onclick="markPaid('+inv.id+')" class="text-xs text-green-400 hover:underline">Mark Paid</button>':'')+'</td>' +
-        '</tr>';
-    }).join('') : '<tr><td colspan="6" class="text-center py-8 text-[#8BA4C8]">No invoices.</td></tr>';
-  } catch(e) { document.getElementById('inv-table').innerHTML = '<tr><td colspan="6" class="text-center py-8 text-red-400">Failed to load.</td></tr>'; }
+    var d = await api.get('/invoices/all?limit=100');
+    allInvoices = d.invoices;
+    var paid = allInvoices.filter(function(i){return i.status==='paid';});
+    var unpaid = allInvoices.filter(function(i){return i.status==='unpaid';});
+    var overdue = allInvoices.filter(function(i){return i.status==='overdue';});
+    var revenue = paid.reduce(function(s,i){return s+parseFloat(i.total_amount||0);},0);
+    document.getElementById('count-paid').textContent = paid.length;
+    document.getElementById('count-unpaid').textContent = unpaid.length;
+    document.getElementById('count-overdue').textContent = overdue.length;
+    document.getElementById('total-revenue').textContent = 'PKR ' + revenue.toLocaleString();
+    renderInvoices();
+  } catch(e) {
+    document.getElementById('inv-table').innerHTML = '<tr><td colspan="6" class="text-center py-10 text-red-400">Failed to load.</td></tr>';
+    document.getElementById('inv-cards').innerHTML = '<div class="service-card p-5 text-center text-red-400 text-sm">Failed to load.</div>';
+  }
 }
 async function markPaid(id) {
   try { await api.patch('/invoices/'+id+'/status', {status:'paid'}); load(); } catch(e) { alert('Failed: '+e.message); }

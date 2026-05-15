@@ -45,7 +45,7 @@
 </section>
 
 <div id="footer-root"></div>
-<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+<a id="whatsapp-btn" href="#" data-number="923001234567" target="_blank" aria-label="WhatsApp"></a>
 <script src="/assets/js/components.js"></script>
 <script src="/assets/js/auth.js"></script>
 <script src="/assets/js/main.js"></script>
@@ -76,7 +76,7 @@ function loadPosts() {
       return;
     }
     document.getElementById('blog-grid').innerHTML = d.posts.map(function(p) {
-      var date = p.published_at ? new Date(p.published_at).toLocaleDateString('en-MY', {year:'numeric',month:'long',day:'numeric'}) : '';
+      var date = p.published_at ? new Date(p.published_at).toLocaleDateString('en-PK', {year:'numeric',month:'long',day:'numeric'}) : '';
       return '<a href="/pages/blog/post.html?slug='+p.slug+'" class="service-card p-6 block group" data-reveal>' +
         '<div class="flex items-center justify-between mb-3"><span class="text-xs text-[#4DA3FF] font-semibold uppercase tracking-wider">'+p.category+'</span><span class="text-xs text-[#8BA4C8]">'+date+'</span></div>' +
         '<h3 class="font-bold text-white text-sm leading-snug mb-3 group-hover:text-[#4DA3FF] transition-colors" style="font-family:Syne,sans-serif;">'+p.title+'</h3>' +

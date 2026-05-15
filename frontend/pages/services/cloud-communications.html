@@ -64,7 +64,7 @@
   </div>
 </section>
 <div id="footer-root"></div>
-<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+<a id="whatsapp-btn" href="#" data-number="923001234567" target="_blank" aria-label="WhatsApp"></a>
 <script src="/assets/js/components.js"></script>
 <script src="/assets/js/auth.js"></script>
 <script src="/assets/js/main.js"></script>
@@ -79,7 +79,7 @@ api.get('/services/cloud-communications').then(function(d) {
     plans.map(function(p) {
       return '<div class="plan-card mb-4 '+(p.is_popular?'popular':'')+'">' +
         (p.is_popular?'<div class="text-xs text-[#4DA3FF] font-bold mb-2">MOST POPULAR</div>':'')+
-        '<div class="flex items-center justify-between"><h3 class="font-bold text-white" style="font-family:Syne,sans-serif;">'+p.name+'</h3><span class="text-lg font-bold text-[#4DA3FF]">RM'+parseFloat(p.price_myr).toFixed(0)+'<span class="text-xs text-[#8BA4C8] font-normal">/mo</span></span></div>' +
+        '<div class="flex items-center justify-between"><h3 class="font-bold text-white" style="font-family:Syne,sans-serif;">'+p.name+'</h3><span class="text-lg font-bold text-[#4DA3FF]">PKR '+parseFloat(p.price_myr).toFixed(0)+'<span class="text-xs text-[#8BA4C8] font-normal">/mo</span></span></div>' +
         '<div class="text-xs text-[#8BA4C8] mt-1">'+p.sla_uptime+'% SLA · '+(p.speed_mbps>=1000?p.speed_mbps/1000+'G':p.speed_mbps+'M')+'bps</div>' +
         '</div>';
     }).join('');

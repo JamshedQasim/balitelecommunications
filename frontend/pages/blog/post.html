@@ -45,7 +45,7 @@
 </article>
 
 <div id="footer-root"></div>
-<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+<a id="whatsapp-btn" href="#" data-number="923001234567" target="_blank" aria-label="WhatsApp"></a>
 <script src="/assets/js/components.js"></script>
 <script src="/assets/js/auth.js"></script>
 <script src="/assets/js/main.js"></script>
@@ -68,7 +68,7 @@ function loadPost() {
     document.getElementById('post-category').textContent = p.category || '';
     document.getElementById('post-title').textContent = p.title;
     document.getElementById('post-author').textContent = 'By ' + (p.author ? p.author.name : 'Bali Telecom Team');
-    document.getElementById('post-date').textContent = p.published_at ? new Date(p.published_at).toLocaleDateString('en-MY', {year:'numeric',month:'long',day:'numeric'}) : '';
+    document.getElementById('post-date').textContent = p.published_at ? new Date(p.published_at).toLocaleDateString('en-PK', {year:'numeric',month:'long',day:'numeric'}) : '';
     document.getElementById('post-views').textContent = p.views + ' views';
     document.getElementById('post-body').innerHTML = p.content || '<p>' + p.excerpt + '</p>';
     var tags = p.tags || [];

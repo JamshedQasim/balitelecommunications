@@ -55,7 +55,7 @@ var pc = {low:'text-green-400',medium:'text-yellow-400',high:'text-orange-400',c
 var sc2 = {open:'status-warning',in_progress:'status-warning',resolved:'status-up',closed:'status-up'};
 api.get('/tickets/my').then(function(d){
   document.getElementById('tickets-table').innerHTML = d.tickets.length ? d.tickets.map(function(t){
-    var dt = new Date(t.created_at).toLocaleDateString('en-MY');
+    var dt = new Date(t.created_at).toLocaleDateString('en-PK');
     return '<tr class="border-b border-white/5 hover:bg-white/2">' +
       '<td class="px-6 py-4 text-white font-medium max-w-xs truncate">' + t.subject + '</td>' +
       '<td class="px-4 py-4 text-[#8BA4C8] capitalize">' + t.category + '</td>' +

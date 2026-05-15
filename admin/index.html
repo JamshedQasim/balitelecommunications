@@ -2,82 +2,255 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Admin Dashboard — Bali Telecom</title>
+  <title>Dashboard — Admin | BaliTelecom</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/assets/css/custom.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    .nav-item { display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:#8BA4C8;font-size:14px;transition:all .15s;cursor:pointer;text-decoration:none; }
+    .nav-item:hover { color:#fff;background:rgba(255,255,255,0.06); }
+    .nav-item.active { color:#fff;background:rgba(24,95,165,0.35);border:1px solid rgba(24,95,165,0.3); }
+    .nav-item svg { flex-shrink:0;width:16px;height:16px; }
+    .stat-box { background:rgba(13,31,60,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px; }
+    .admin-table th { padding:12px 16px;font-size:12px;font-weight:600;color:#8BA4C8;text-align:left;border-bottom:1px solid rgba(255,255,255,0.07);white-space:nowrap; }
+    .admin-table td { padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle; }
+    .admin-table tr:last-child td { border-bottom:none; }
+    .admin-table tr:hover td { background:rgba(255,255,255,0.015); }
+  </style>
 </head>
 <body class="network-bg min-h-screen">
-<div class="flex min-h-screen">
-  <!-- Admin Sidebar -->
-  <aside class="w-64 bg-[#05090F] border-r border-white/10 flex flex-col fixed h-full z-50">
-    <div class="p-6 border-b border-white/10">
-      <div class="text-white font-bold text-sm" style="font-family:Syne,sans-serif;">BaliTelecom <span class="text-red-400 text-xs">ADMIN</span></div>
-      <div class="text-[#8BA4C8] text-xs mt-1" id="admin-name">Loading...</div>
+
+<!-- Mobile overlay -->
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-[#05090F] border-r border-white/10 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+  <div class="p-5 border-b border-white/10 flex items-center gap-3">
+    <div class="w-9 h-9 bg-gradient-to-br from-[#185FA5] to-[#2580E8] rounded-xl flex items-center justify-center flex-shrink-0">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
     </div>
-    <nav class="flex-1 p-4 space-y-1 text-sm">
-      <a href="/admin/index.html" class="block px-4 py-2.5 rounded-lg bg-white/10 text-white">Dashboard</a>
-      <a href="/admin/leads.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Leads</a>
-      <a href="/admin/tickets.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Tickets</a>
-      <a href="/admin/users.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Users</a>
-      <a href="/admin/invoices.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Invoices</a>
-      <a href="/admin/blog.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">Blog Posts</a>
-      <hr class="border-white/10 my-3"/>
-      <a href="/pages/index.html" class="block px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-all">← View Site</a>
-    </nav>
-    <div class="p-4 border-t border-white/10">
-      <button id="logout-btn" class="w-full px-4 py-2.5 rounded-lg text-[#8BA4C8] hover:text-red-400 text-sm text-left">Sign Out</button>
+    <div>
+      <div class="text-white font-bold text-sm" style="font-family:Syne,sans-serif;">BaliTelecom</div>
+      <div class="text-red-400 text-xs font-bold tracking-widest">ADMIN</div>
     </div>
-  </aside>
-  <!-- Main -->
-  <main class="ml-64 flex-1 p-8">
-    <div class="max-w-6xl mx-auto">
-      <h1 class="text-2xl font-bold text-white mb-8" style="font-family:Syne,sans-serif;">Admin Dashboard</h1>
-      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-[#4DA3FF]" id="s-leads">—</div><div class="text-xs text-[#8BA4C8] mt-1">Total Leads</div></div>
-        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-yellow-400" id="s-new-leads">—</div><div class="text-xs text-[#8BA4C8] mt-1">New Leads</div></div>
-        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-red-400" id="s-tickets">—</div><div class="text-xs text-[#8BA4C8] mt-1">Open Tickets</div></div>
-        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-orange-400" id="s-unpaid">—</div><div class="text-xs text-[#8BA4C8] mt-1">Unpaid Invoices</div></div>
-        <div class="service-card p-4 text-center"><div class="text-2xl font-bold text-green-400" id="s-users">—</div><div class="text-xs text-[#8BA4C8] mt-1">Clients</div></div>
-      </div>
-      <div class="grid lg:grid-cols-2 gap-6">
-        <div class="service-card p-6">
-          <h2 class="font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Recent Leads <a href="/admin/leads.html" class="text-[#4DA3FF] text-xs ml-2">View all</a></h2>
-          <div id="recent-leads" class="text-[#8BA4C8] text-sm text-center py-6">Loading...</div>
+  </div>
+  <div class="px-4 py-3 border-b border-white/5">
+    <div class="text-white text-sm font-medium" id="admin-name">—</div>
+    <div class="text-[#8BA4C8] text-xs mt-0.5">Administrator</div>
+  </div>
+  <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
+    <a href="/admin/index.html" class="nav-item active">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/leads.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+      Leads
+      <span id="nav-new-leads" class="ml-auto text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-1.5 py-0.5 rounded-full hidden"></span>
+    </a>
+    <a href="/admin/tickets.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+      Tickets
+      <span id="nav-open-tickets" class="ml-auto text-xs bg-red-500/20 text-red-300 border border-red-500/30 px-1.5 py-0.5 rounded-full hidden"></span>
+    </a>
+    <a href="/admin/users.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      Users
+    </a>
+    <a href="/admin/invoices.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Invoices
+    </a>
+    <a href="/admin/blog.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+      Blog Posts
+    </a>
+  </nav>
+  <div class="p-3 border-t border-white/10 space-y-0.5">
+    <a href="/pages/index.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      View Site
+    </a>
+    <button id="logout-btn" class="nav-item w-full text-left hover:text-red-400 hover:bg-red-500/5">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </button>
+  </div>
+</aside>
+
+<!-- Main content -->
+<div class="lg:ml-64 flex flex-col min-h-screen">
+
+  <!-- Top bar -->
+  <header class="sticky top-0 z-30 bg-[#05090F]/95 backdrop-blur-sm border-b border-white/10 px-4 sm:px-6 py-3 flex items-center gap-3">
+    <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg text-[#8BA4C8] hover:text-white hover:bg-white/5 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div>
+      <h1 class="text-white font-bold text-base sm:text-lg" style="font-family:Syne,sans-serif;">Dashboard</h1>
+      <p class="text-[#8BA4C8] text-xs hidden sm:block">Welcome back — here's what's happening</p>
+    </div>
+    <div class="ml-auto flex items-center gap-2">
+      <a href="/pages/contact.html" class="hidden sm:flex btn-primary text-xs py-2 px-4">+ New Lead</a>
+    </div>
+  </header>
+
+  <!-- Page body -->
+  <main class="flex-1 p-4 sm:p-6 lg:p-8">
+    <div class="max-w-6xl mx-auto space-y-6">
+
+      <!-- Stat cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+        <div class="stat-box col-span-1">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[#8BA4C8] text-xs uppercase tracking-wider">Total Leads</span>
+            <div class="w-8 h-8 rounded-lg bg-[#185FA5]/20 flex items-center justify-center">
+              <svg class="w-4 h-4 text-[#4DA3FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-bold text-[#4DA3FF]" id="s-leads" style="font-family:Syne,sans-serif;">—</div>
         </div>
-        <div class="service-card p-6">
-          <h2 class="font-bold text-white mb-4" style="font-family:Syne,sans-serif;">Recent Tickets <a href="/admin/tickets.html" class="text-[#4DA3FF] text-xs ml-2">View all</a></h2>
-          <div id="recent-tickets-admin" class="text-[#8BA4C8] text-sm text-center py-6">Loading...</div>
+        <div class="stat-box col-span-1">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[#8BA4C8] text-xs uppercase tracking-wider">New Leads</span>
+            <div class="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-bold text-yellow-400" id="s-new-leads" style="font-family:Syne,sans-serif;">—</div>
+        </div>
+        <div class="stat-box col-span-1">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[#8BA4C8] text-xs uppercase tracking-wider">Open Tickets</span>
+            <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-bold text-red-400" id="s-tickets" style="font-family:Syne,sans-serif;">—</div>
+        </div>
+        <div class="stat-box col-span-1">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[#8BA4C8] text-xs uppercase tracking-wider">Unpaid Inv.</span>
+            <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-bold text-orange-400" id="s-unpaid" style="font-family:Syne,sans-serif;">—</div>
+        </div>
+        <div class="stat-box col-span-1">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[#8BA4C8] text-xs uppercase tracking-wider">Clients</span>
+            <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-bold text-green-400" id="s-users" style="font-family:Syne,sans-serif;">—</div>
         </div>
       </div>
+
+      <!-- Quick links -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <a href="/admin/leads.html" class="service-card p-4 flex items-center gap-3 hover:border-[#185FA5]/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+          </div>
+          <span class="text-white text-sm font-semibold group-hover:text-[#4DA3FF] transition-colors" style="font-family:Syne,sans-serif;">View Leads</span>
+        </a>
+        <a href="/admin/tickets.html" class="service-card p-4 flex items-center gap-3 hover:border-[#185FA5]/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+          </div>
+          <span class="text-white text-sm font-semibold group-hover:text-[#4DA3FF] transition-colors" style="font-family:Syne,sans-serif;">Tickets</span>
+        </a>
+        <a href="/admin/invoices.html" class="service-card p-4 flex items-center gap-3 hover:border-[#185FA5]/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <span class="text-white text-sm font-semibold group-hover:text-[#4DA3FF] transition-colors" style="font-family:Syne,sans-serif;">Invoices</span>
+        </a>
+        <a href="/admin/users.html" class="service-card p-4 flex items-center gap-3 hover:border-[#185FA5]/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+          <span class="text-white text-sm font-semibold group-hover:text-[#4DA3FF] transition-colors" style="font-family:Syne,sans-serif;">Users</span>
+        </a>
+      </div>
+
+      <!-- Recent data -->
+      <div class="grid lg:grid-cols-2 gap-4 sm:gap-6">
+        <!-- Recent Leads -->
+        <div class="service-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-white/5">
+            <h2 class="font-bold text-white text-sm" style="font-family:Syne,sans-serif;">Recent Leads</h2>
+            <a href="/admin/leads.html" class="text-[#4DA3FF] text-xs hover:underline">View all →</a>
+          </div>
+          <div id="recent-leads" class="text-[#8BA4C8] text-sm text-center py-8">Loading...</div>
+        </div>
+
+        <!-- Recent Tickets -->
+        <div class="service-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-white/5">
+            <h2 class="font-bold text-white text-sm" style="font-family:Syne,sans-serif;">Recent Tickets</h2>
+            <a href="/admin/tickets.html" class="text-[#4DA3FF] text-xs hover:underline">View all →</a>
+          </div>
+          <div id="recent-tickets-admin" class="text-[#8BA4C8] text-sm text-center py-8">Loading...</div>
+        </div>
+      </div>
+
     </div>
   </main>
 </div>
+
 <script src="/assets/js/auth.js"></script>
 <script src="/assets/js/main.js"></script>
 <script>
 if (!auth.isAdmin()) { window.location.href = '/pages/portal/login.html'; }
 var user = auth.getUser();
-document.getElementById('admin-name').textContent = user ? user.name : '';
+document.getElementById('admin-name').textContent = user ? user.name : 'Admin';
 document.getElementById('logout-btn').addEventListener('click', auth.logout);
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('-translate-x-full');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.add('-translate-x-full');
+  document.getElementById('sidebar-overlay').classList.add('hidden');
+}
+
+var statColors = { new:'text-yellow-400', contacted:'text-blue-400', converted:'text-green-400', lost:'text-red-400' };
+var prioColors = { low:'text-green-400', medium:'text-yellow-400', high:'text-orange-400', critical:'text-red-400' };
+
 async function load() {
   try {
     var s = await api.get('/admin/stats');
-    document.getElementById('s-leads').textContent = s.stats.totalLeads;
+    document.getElementById('s-leads').textContent   = s.stats.totalLeads;
     document.getElementById('s-new-leads').textContent = s.stats.newLeads;
     document.getElementById('s-tickets').textContent = s.stats.openTickets;
-    document.getElementById('s-unpaid').textContent = s.stats.unpaidInvoices;
-    document.getElementById('s-users').textContent = s.stats.totalUsers;
+    document.getElementById('s-unpaid').textContent  = s.stats.unpaidInvoices;
+    document.getElementById('s-users').textContent   = s.stats.totalUsers;
+    if (s.stats.newLeads > 0) { var nb = document.getElementById('nav-new-leads'); nb.textContent = s.stats.newLeads; nb.classList.remove('hidden'); }
+    if (s.stats.openTickets > 0) { var nt = document.getElementById('nav-open-tickets'); nt.textContent = s.stats.openTickets; nt.classList.remove('hidden'); }
+
     var lr = await api.get('/leads?limit=5');
-    var sc = {new:'text-yellow-400',contacted:'text-blue-400',converted:'text-green-400',lost:'text-red-400'};
-    document.getElementById('recent-leads').innerHTML = lr.leads.length ? '<div class="space-y-2">'+lr.leads.map(function(l){
-      return '<div class="flex justify-between items-center py-2 border-b border-white/5 text-xs"><div><div class="text-white font-medium">'+l.name+'</div><div class="text-[#8BA4C8]">'+l.email+' · '+(l.company||'-')+'</div></div><span class="capitalize '+(sc[l.status]||'text-gray-400')+'">'+l.status+'</span></div>';
-    }).join('')+'</div>' : 'No leads yet.';
+    document.getElementById('recent-leads').innerHTML = lr.leads.length
+      ? '<div>' + lr.leads.map(function(l) {
+          return '<div class="flex items-center justify-between px-5 py-3 border-b border-white/5 last:border-0 hover:bg-white/[0.02]">' +
+            '<div class="min-w-0 flex-1"><div class="text-white text-sm font-medium truncate">'+l.name+'</div><div class="text-[#8BA4C8] text-xs truncate">'+(l.company||l.email)+'</div></div>' +
+            '<span class="ml-3 text-xs font-semibold capitalize '+(statColors[l.status]||'text-gray-400')+'">'+l.status+'</span>' +
+          '</div>';
+        }).join('') + '</div>'
+      : '<div class="px-5 py-8 text-center text-[#8BA4C8] text-sm">No leads yet.</div>';
+
     var tr = await api.get('/tickets/all?limit=5');
-    var pc = {low:'text-green-400',medium:'text-yellow-400',high:'text-orange-400',critical:'text-red-400'};
-    document.getElementById('recent-tickets-admin').innerHTML = tr.tickets.length ? '<div class="space-y-2">'+tr.tickets.map(function(t){
-      return '<div class="flex justify-between items-center py-2 border-b border-white/5 text-xs"><div><div class="text-white font-medium truncate max-w-xs">'+t.subject+'</div><div class="text-[#8BA4C8]">'+(t.user?t.user.name:'')+'</div></div><span class="capitalize '+(pc[t.priority]||'text-gray-400')+'">'+t.priority+'</span></div>';
-    }).join('')+'</div>' : 'No tickets yet.';
+    document.getElementById('recent-tickets-admin').innerHTML = tr.tickets.length
+      ? '<div>' + tr.tickets.map(function(t) {
+          return '<div class="flex items-center justify-between px-5 py-3 border-b border-white/5 last:border-0 hover:bg-white/[0.02]">' +
+            '<div class="min-w-0 flex-1"><div class="text-white text-sm font-medium truncate">'+t.subject+'</div><div class="text-[#8BA4C8] text-xs">'+(t.user?t.user.name:'')+'</div></div>' +
+            '<span class="ml-3 text-xs font-semibold capitalize '+(prioColors[t.priority]||'text-gray-400')+'">'+t.priority+'</span>' +
+          '</div>';
+        }).join('') + '</div>'
+      : '<div class="px-5 py-8 text-center text-[#8BA4C8] text-sm">No tickets yet.</div>';
   } catch(e) { console.error(e); }
 }
 load();

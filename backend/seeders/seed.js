@@ -9,9 +9,9 @@ async function seed() {
   console.log('Tables created');
 
   // Admin user
-  await User.create({ name: 'Admin', email: 'admin@balitelecommunications.com', password_hash: 'Admin@1234', role: 'admin', company: 'Bali Telecommunications', phone: '+60123456789' });
+  await User.create({ name: 'Admin', email: 'admin@balitelecommunications.com', password_hash: 'Admin@1234', role: 'admin', company: 'Bali Telecommunications (Pvt) Ltd', phone: '+923001234567' });
   // Demo client
-  await User.create({ name: 'Ahmad Ridzwan', email: 'client@example.com', password_hash: 'Client@1234', role: 'client', company: 'ABC Sdn Bhd', phone: '+60187654321' });
+  await User.create({ name: 'Ali Hassan', email: 'client@example.com', password_hash: 'Client@1234', role: 'client', company: 'ABC (Pvt) Ltd', phone: '+923211234567' });
   console.log('Users seeded');
 
   // Services
@@ -47,16 +47,16 @@ async function seed() {
 
   // Coverage areas
   await CoverageArea.bulkCreate([
-    { city: 'Kuala Lumpur', state: 'Wilayah Persekutuan', lat: 3.1390, lng: 101.6869, coverage_type: 'full', status: 'available' },
-    { city: 'Petaling Jaya', state: 'Selangor', lat: 3.1073, lng: 101.6067, coverage_type: 'full', status: 'available' },
-    { city: 'Shah Alam', state: 'Selangor', lat: 3.0733, lng: 101.5185, coverage_type: 'fiber', status: 'available' },
-    { city: 'Subang Jaya', state: 'Selangor', lat: 3.0570, lng: 101.5831, coverage_type: 'full', status: 'available' },
-    { city: 'Cyberjaya', state: 'Selangor', lat: 2.9213, lng: 101.6559, coverage_type: 'full', status: 'available' },
-    { city: 'Putrajaya', state: 'Wilayah Persekutuan', lat: 2.9264, lng: 101.6964, coverage_type: 'fiber', status: 'available' },
-    { city: 'Penang', state: 'Pulau Pinang', lat: 5.4141, lng: 100.3288, coverage_type: 'fiber', status: 'available' },
-    { city: 'Johor Bahru', state: 'Johor', lat: 1.4927, lng: 103.7414, coverage_type: 'fiber', status: 'available' },
-    { city: 'Kota Kinabalu', state: 'Sabah', lat: 5.9804, lng: 116.0735, coverage_type: 'wireless', status: 'coming_soon' },
-    { city: 'Kuching', state: 'Sarawak', lat: 1.5497, lng: 110.3626, coverage_type: 'wireless', status: 'coming_soon' }
+    { city: 'Karachi',     state: 'Sindh',              lat: 24.8607, lng: 67.0011,  coverage_type: 'full',     status: 'available'   },
+    { city: 'Lahore',      state: 'Punjab',             lat: 31.5204, lng: 74.3587,  coverage_type: 'full',     status: 'available'   },
+    { city: 'Islamabad',   state: 'ICT',                lat: 33.6844, lng: 73.0479,  coverage_type: 'full',     status: 'available'   },
+    { city: 'Rawalpindi',  state: 'Punjab',             lat: 33.5651, lng: 73.0169,  coverage_type: 'fiber',    status: 'available'   },
+    { city: 'Faisalabad',  state: 'Punjab',             lat: 31.4504, lng: 73.1350,  coverage_type: 'fiber',    status: 'available'   },
+    { city: 'Multan',      state: 'Punjab',             lat: 30.1575, lng: 71.5249,  coverage_type: 'fiber',    status: 'available'   },
+    { city: 'Hyderabad',   state: 'Sindh',              lat: 25.3960, lng: 68.3578,  coverage_type: 'fiber',    status: 'available'   },
+    { city: 'Quetta',      state: 'Balochistan',        lat: 30.1798, lng: 66.9750,  coverage_type: 'wireless', status: 'coming_soon' },
+    { city: 'Peshawar',    state: 'Khyber Pakhtunkhwa', lat: 34.0151, lng: 71.5249,  coverage_type: 'wireless', status: 'coming_soon' },
+    { city: 'Sialkot',     state: 'Punjab',             lat: 32.4945, lng: 74.5229,  coverage_type: 'wireless', status: 'coming_soon' }
   ]);
   console.log('Coverage areas seeded');
 

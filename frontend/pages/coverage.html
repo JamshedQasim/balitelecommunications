@@ -17,7 +17,7 @@
   <div class="max-w-3xl mx-auto px-4">
     <div class="section-tag">Coverage</div>
     <h1 class="text-5xl font-extrabold text-white mt-3 mb-4" style="font-family:Syne,sans-serif;">Our <span class="gradient-text">Coverage Map</span></h1>
-    <p class="text-[#8BA4C8]">Check if our fiber and enterprise telecom services are available in your area. Expanding to East Malaysia in 2026.</p>
+    <p class="text-[#8BA4C8]">Check if our fiber and enterprise telecom services are available in your area. Expanding to Peshawar and Quetta in 2026.</p>
   </div>
 </section>
 
@@ -51,7 +51,7 @@
 </section>
 
 <div id="footer-root"></div>
-<a id="whatsapp-btn" href="#" data-number="60123456789" target="_blank" aria-label="WhatsApp"></a>
+<a id="whatsapp-btn" href="#" data-number="923001234567" target="_blank" aria-label="WhatsApp"></a>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="/assets/js/components.js"></script>
 <script src="/assets/js/auth.js"></script>
@@ -60,7 +60,7 @@
 document.getElementById('nav-root').innerHTML = components.getNavHTML('coverage');
 document.getElementById('footer-root').innerHTML = components.getFooterHTML();
 
-var map = L.map('coverage-map', { center: [4.0, 109.5], zoom: 6, zoomControl: true });
+var map = L.map('coverage-map', { center: [30.3753, 69.3451], zoom: 6, zoomControl: true });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution: '© OpenStreetMap contributors © CARTO', subdomains: 'abcd', maxZoom: 19
 }).addTo(map);
