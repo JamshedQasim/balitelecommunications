@@ -22,17 +22,24 @@
 <section class="pb-12">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid md:grid-cols-3 gap-6">
-      ${[
-        ['🔥','Emergency Hotline','Critical outages & P1 incidents','+92 21-111-234-567','tel:+922111234567','btn-primary'],
-        ['💬','WhatsApp Support','Non-urgent queries & updates','+92 300-123-4567','https://wa.me/923001234567','btn-outline'],
-        ['📧','Email Support','Technical & billing questions','support@balitelecom.com','mailto:support@balitelecommunications.com','btn-outline'],
-      ].map(([i,t,d,v,h,b]) => `
       <div class="service-card p-6 text-center">
-        <div class="text-3xl mb-3">${i}</div>
-        <h3 class="font-bold text-white mb-1" style="font-family:'Syne',sans-serif;">${t}</h3>
-        <p class="text-[#8BA4C8] text-xs mb-4">${d}</p>
-        <a href="${h}" class="${b} text-sm py-2 w-full justify-center">${v}</a>
-      </div>`).join('')}
+        <div class="text-3xl mb-3">🔥</div>
+        <h3 class="font-bold text-white mb-1" style="font-family:'Syne',sans-serif;">Emergency Hotline</h3>
+        <p class="text-[#8BA4C8] text-xs mb-4">Critical outages and P1 incidents</p>
+        <a href="tel:+922111234567" class="btn-primary text-sm py-2 w-full justify-center">+92 21-111-234-567</a>
+      </div>
+      <div class="service-card p-6 text-center">
+        <div class="text-3xl mb-3">💬</div>
+        <h3 class="font-bold text-white mb-1" style="font-family:'Syne',sans-serif;">WhatsApp Support</h3>
+        <p class="text-[#8BA4C8] text-xs mb-4">Non-urgent queries and updates</p>
+        <a href="https://wa.me/923001234567" class="btn-outline text-sm py-2 w-full justify-center">+92 300-123-4567</a>
+      </div>
+      <div class="service-card p-6 text-center">
+        <div class="text-3xl mb-3">📧</div>
+        <h3 class="font-bold text-white mb-1" style="font-family:'Syne',sans-serif;">Email Support</h3>
+        <p class="text-[#8BA4C8] text-xs mb-4">Technical and billing questions</p>
+        <a href="mailto:support@balitelecommunications.com" class="btn-outline text-sm py-2 w-full justify-center">support@balitelecom.com</a>
+      </div>
     </div>
   </div>
 </section>
@@ -82,23 +89,62 @@
   <div class="max-w-3xl mx-auto px-4">
     <h2 class="text-3xl font-bold text-white text-center mb-10" style="font-family:'Syne',sans-serif;">Frequently Asked Questions</h2>
     <div class="space-y-3" id="faq-list">
-      ${[
-        ['What is the installation timeline?','For fiber internet, standard installation is 5–7 business days. Enterprise deployments with custom cabling may take 2–3 weeks.'],
-        ['Do you provide 24/7 support?','Yes. Our Network Operations Center (NOC) monitors all client infrastructure 24 hours a day, 7 days a week. Enterprise clients receive a dedicated support line.'],
-        ['What is your SLA guarantee?','SME plans carry 99.5% uptime SLA. Enterprise plans guarantee 99.9%–99.99% depending on the tier. Downtime compensation is outlined in your service agreement.'],
-        ['Can I upgrade my plan?','Yes, plan upgrades are processed within 3–5 business days. Contact your account manager or submit a ticket.'],
-        ['Do you provide static IP addresses?','All business plans include at least one static IP. Enterprise plans include IP blocks (/29 or larger). IPv6 is available on request.'],
-        ['What happens during a service outage?','Our NOC detects outages automatically and begins troubleshooting immediately. You will receive SMS/email notifications within 15 minutes. Critical outages receive dedicated engineer response.'],
-        ['Is there a contract commitment?','Plans are available on 12-month and 24-month contracts. Month-to-month is available at a premium. Enterprise multi-year contracts receive significant discounts.'],
-        ['Do you support SD-WAN?','Yes. Our enterprise team can design and deploy SD-WAN solutions for multi-branch connectivity. Contact enterprise sales for a network design consultation.'],
-      ].map(([q,a]) => `
       <div class="service-card overflow-hidden">
         <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
-          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">${q}</span>
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">What is the installation timeline?</span>
           <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">${a}</div>
-      </div>`).join('')}
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">For fiber internet, standard installation is 5 to 7 business days. Enterprise deployments with custom cabling may take 2 to 3 weeks.</div>
+      </div>
+      <div class="service-card overflow-hidden">
+        <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">Do you provide 24/7 support?</span>
+          <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">Yes. Our Network Operations Center monitors all client infrastructure 24 hours a day, 7 days a week. Enterprise clients receive a dedicated support line.</div>
+      </div>
+      <div class="service-card overflow-hidden">
+        <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">What is your SLA guarantee?</span>
+          <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">SME plans carry a 99.5% uptime SLA. Enterprise plans guarantee 99.9% to 99.99% depending on the tier. Downtime compensation is outlined in your service agreement.</div>
+      </div>
+      <div class="service-card overflow-hidden">
+        <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">Can I upgrade my plan?</span>
+          <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">Yes, plan upgrades are processed within 3 to 5 business days. Contact your account manager or submit a support ticket.</div>
+      </div>
+      <div class="service-card overflow-hidden">
+        <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">Do you provide static IP addresses?</span>
+          <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">All business plans include at least one static IP. Enterprise plans include IP blocks of /29 or larger. IPv6 is available on request.</div>
+      </div>
+      <div class="service-card overflow-hidden">
+        <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">What happens during a service outage?</span>
+          <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">Our NOC detects outages automatically and begins troubleshooting immediately. You will receive SMS and email notifications within 15 minutes. Critical outages receive a dedicated engineer response.</div>
+      </div>
+      <div class="service-card overflow-hidden">
+        <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">Is there a contract commitment?</span>
+          <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">Plans are available on 12-month and 24-month contracts. Month-to-month is available at a premium. Enterprise multi-year contracts receive significant discounts.</div>
+      </div>
+      <div class="service-card overflow-hidden">
+        <button class="w-full text-left p-5 flex items-center justify-between gap-4 faq-btn">
+          <span class="font-semibold text-white text-sm" style="font-family:'Syne',sans-serif;">Do you support SD-WAN?</span>
+          <svg class="w-5 h-5 text-[#4DA3FF] flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-[#8BA4C8] text-sm leading-relaxed">Yes. Our enterprise team can design and deploy SD-WAN solutions for multi-branch connectivity. Contact enterprise sales for a network design consultation.</div>
+      </div>
     </div>
   </div>
 </section>
