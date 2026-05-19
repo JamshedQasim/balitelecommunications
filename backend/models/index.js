@@ -73,7 +73,7 @@ const BlogPost = sequelize.define('BlogPost', {
   title: { type: DataTypes.STRING(255), allowNull: false },
   slug: { type: DataTypes.STRING(255), allowNull: false, unique: true },
   excerpt: { type: DataTypes.STRING(400) },
-  content: { type: DataTypes.TEXT('long') },
+  content: { type: DataTypes.TEXT },
   meta_description: { type: DataTypes.STRING(160) },
   cover_image: { type: DataTypes.STRING(255) },
   author_id: { type: DataTypes.INTEGER, references: { model: 'users', key: 'id' } },

@@ -27,8 +27,11 @@ app.use(helmet({
 }));
 
 // CORS
+const allowedOrigins = process.env.FRONTEND_URL
+  ? [process.env.FRONTEND_URL, process.env.FRONTEND_URL.replace('://', '://www.')]
+  : true;
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
