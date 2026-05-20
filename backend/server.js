@@ -62,8 +62,8 @@ app.use('/api/leads', (req, res, next) => {
 });
 
 // Serve static frontend files
-app.use(express.static(path.join(__dirname, '../frontend')));
-app.use('/admin', express.static(path.join(__dirname, '../admin')));
+app.use(express.static(path.join(__dirname, 'frontend')));
+app.use('/admin', express.static(path.join(__dirname, 'admin')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes
@@ -84,7 +84,7 @@ app.get('/api/health', (req, res) => {
 
 // Serve HTML pages for all non-API routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/pages/index.html'));
+  res.sendFile(path.join(__dirname, 'frontend/pages/index.html'));
 });
 
 // Global error handler
