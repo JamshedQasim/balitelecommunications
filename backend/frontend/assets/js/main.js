@@ -27,9 +27,11 @@ function initNav() {
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
-      nav.style.background = 'rgba(6,14,30,0.97)';
+      nav.style.background = 'rgba(255,255,255,0.98)';
+      nav.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
     } else {
-      nav.style.background = 'rgba(6,14,30,0.85)';
+      nav.style.background = 'rgba(255,255,255,0.95)';
+      nav.style.boxShadow = '0 1px 4px rgba(0,0,0,0.06)';
     }
   });
 
@@ -182,12 +184,12 @@ function initHeroCanvas() {
       const r2 = ring.r * 1.6 + Math.sin(ring.phase + 1.2) * 20;
       ctx.beginPath();
       ctx.arc(ring.x, ring.y, r1, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(24,95,165,${0.045 + Math.sin(ring.phase) * 0.02})`;
+      ctx.strokeStyle = `rgba(37,99,235,${0.13 + Math.sin(ring.phase) * 0.04})`;
       ctx.lineWidth = 1.2;
       ctx.stroke();
       ctx.beginPath();
       ctx.arc(ring.x, ring.y, r2, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(37,128,232,${0.022 + Math.sin(ring.phase + 1.2) * 0.01})`;
+      ctx.strokeStyle = `rgba(14,165,233,${0.07 + Math.sin(ring.phase + 1.2) * 0.02})`;
       ctx.lineWidth = 0.6;
       ctx.stroke();
     });
@@ -227,9 +229,9 @@ function initHeroCanvas() {
           const hubEdge = nodes[i].isHub || nodes[j].isHub;
           ctx.beginPath();
           ctx.strokeStyle = hubEdge
-            ? `rgba(37,128,232,${f * 0.55})`
-            : `rgba(37,128,232,${f * 0.28})`;
-          ctx.lineWidth = hubEdge ? 0.9 : 0.45;
+            ? `rgba(37,99,235,${f * 0.65})`
+            : `rgba(37,99,235,${f * 0.35})`;
+          ctx.lineWidth = hubEdge ? 1.0 : 0.55;
           ctx.moveTo(nodes[i].x, nodes[i].y);
           ctx.lineTo(nodes[j].x, nodes[j].y);
           ctx.stroke();
@@ -249,11 +251,11 @@ function initHeroCanvas() {
       if (!n.isHub) return;
       for (let ring = 1; ring <= 3; ring++) {
         const rr = n.r + ring * 5.5 + Math.sin(n.phase * 0.65 * ring) * 4;
-        const alpha = (0.2 / ring) * (0.55 + Math.sin(n.phase) * 0.45);
+        const alpha = (0.35 / ring) * (0.55 + Math.sin(n.phase) * 0.45);
         ctx.beginPath();
         ctx.arc(n.x, n.y, rr, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(77,163,255,${alpha})`;
-        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = `rgba(37,99,235,${alpha})`;
+        ctx.lineWidth = 0.8;
         ctx.stroke();
       }
     });
@@ -271,16 +273,16 @@ function initHeroCanvas() {
         ctx.fill();
       }
       // Core circle
-      const gAlpha = n.isHub ? 0.8 + Math.sin(n.phase) * 0.2 : 0.65;
+      const gAlpha = n.isHub ? 0.85 + Math.sin(n.phase) * 0.15 : 0.7;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(77,163,255,${gAlpha})`;
+      ctx.fillStyle = `rgba(37,99,235,${gAlpha})`;
       ctx.fill();
       // Bright inner core for hubs
       if (n.isHub) {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r * 0.45, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(210,235,255,0.92)';
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
         ctx.fill();
       }
     });
@@ -304,15 +306,15 @@ function initHeroCanvas() {
         ctx.beginPath();
         ctx.arc(tx, ty, tailR, 0, Math.PI * 2);
         ctx.fillStyle = k === 0
-          ? 'rgba(255,255,255,0.97)'
-          : `rgba(147,197,253,${tailAlpha})`;
+          ? 'rgba(30,58,150,0.95)'
+          : `rgba(59,130,246,${tailAlpha})`;
         ctx.fill();
       }
 
       // Head glow halo
       const hg = ctx.createRadialGradient(x, y, 0, x, y, 9);
-      hg.addColorStop(0, 'rgba(200,230,255,0.45)');
-      hg.addColorStop(1, 'rgba(77,163,255,0)');
+      hg.addColorStop(0, 'rgba(37,99,235,0.3)');
+      hg.addColorStop(1, 'rgba(37,99,235,0)');
       ctx.beginPath();
       ctx.arc(x, y, 9, 0, Math.PI * 2);
       ctx.fillStyle = hg;
@@ -361,8 +363,8 @@ async function initNetworkStatus() {
 function initWhatsApp() {
   const btn = document.getElementById('whatsapp-btn');
   if (!btn) return;
-  const num = btn.dataset.number || '923001234567';
-  btn.href = `https://wa.me/${num}?text=Hello%2C%20I%27m%20interested%20in%20your%20telecom%20services.`;
+  const num = btn.dataset.number || '923373819147';
+  btn.href = `https://wa.me/${num}`;
 }
 
 // ── Init All ──────────────────────────────────────────
