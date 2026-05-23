@@ -21,6 +21,9 @@ const adminRoutes = require('./routes/admin.routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust Hostinger's reverse proxy
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet({
   contentSecurityPolicy: false
@@ -97,17 +100,18 @@ app.use((err, req, res, next) => {
 
 // Start server
 async function start() {
+  // Always start the HTTP server so pages are served even if DB is down
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  });
+
   try {
     await sequelize.authenticate();
     console.log('✅ Database connected');
     await sequelize.sync({ alter: false });
     console.log('✅ Models synced');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
-    });
   } catch (err) {
-    console.error('❌ Failed to start:', err);
-    process.exit(1);
+    console.error('⚠️  Database unavailable — site running in static mode:', err.message);
   }
 }
 
